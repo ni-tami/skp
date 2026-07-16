@@ -17,7 +17,7 @@ def signup(body: SignupIn, db: Session = Depends(get_db)):
         email=body.email,
         password_hash=hash_password(body.password),
         role=body.role,
-        display_name=body.display_name,
+        display_name=body.display_name
     )
     db.add(user)
     db.commit()
