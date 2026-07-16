@@ -444,7 +444,7 @@ async def delete_routine_schedule(schedule_id: int, db: AsyncSession = Depends(g
 
 @router.get("/schedule/{type}/{caregiver_id}/{carerecipient_id}/{routineschedule_date}", response_model=RoutineSchedulesByDateResponse)
 async def get_routine_schedules_by_date(
-    type: Literal["caregiver", "carerecipient"],
+    type: Literal["caregiver", "recipient"],
     caregiver_id: int, 
     carerecipient_id: int, 
     routineschedule_date: date_type, 
