@@ -30,7 +30,7 @@ def upgrade() -> None:
         sa.Column("display_name", sa.String(), nullable=True),
         sa.Column("expo_push_token", sa.String(), nullable=True),
         sa.Column("status", sa.String(), nullable=True),
-        sa.Column("created_at", sa.DateTime(), nullable=True),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.Column("deleted_at", sa.DateTime(), nullable=True),
         sa.Column("home_lat", sa.Float(), nullable=True),

@@ -21,7 +21,13 @@ elif DATABASE_URL.startswith("postgresql"):
     engine = create_async_engine(
         DATABASE_URL,
         echo=False,
+        pool_size=8,
+        max_overflow=5,
+        pool_timeout=30,
+        pool_recycle=1800,
+        pool_pre_ping=True,  # drop dead conns (Supabase restarts)
     )
+
 else:
     raise ValueError(f"Unsupported database URL scheme: {DATABASE_URL}")
 
