@@ -1,5 +1,5 @@
 import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AnimatedIcon } from '@/components/animated-icon';
@@ -15,7 +15,7 @@ function getDevMenuHint() {
   }
   if (Device.isDevice) {
     return (
-      <ThemedText type="small">
+      <ThemedText type="small" className="text-red-50">
         shake device or press <ThemedText type="code">m</ThemedText> in terminal
       </ThemedText>
     );
@@ -39,9 +39,9 @@ export default function HomeScreen() {
           </ThemedText>
         </ThemedView>
 
-        <ThemedText type="code" style={styles.code}>
+        <Text className='text-6xl text-white'>
           get started
-        </ThemedText>
+        </Text>
 
         <ThemedView type="backgroundElement" style={styles.stepContainer}>
           <HintRow
