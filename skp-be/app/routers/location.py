@@ -4,6 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.repositories.push import send_push
+
 from ..deps import get_db, get_current_user, require_role
 from ..models import User, Connection
 from ..schemas import GeofenceIn, GeofenceOut, PointIn, PointAck
@@ -136,26 +138,51 @@ async def post_point(
     if user.home_lat is not None and user.home_lng is not None and user.home_radius_in_m:
         dist = _haversine_m(body.lat, body.lng, user.home_lat, user.home_lng)
         currently_outside = dist > user.home_radius_in_m
+        recipient = await db.execute(select(User).where(User.id == user.id)).one_or_none()
 
         prev = user.geofence_state
-        # TODO handle alert
         if prev is None:
             # first point after geofence set/changed: establish baseline silently
             state = "outside" if currently_outside else "inside"
         else:
             if currently_outside and prev != "outside":
                 # exit zone transition -> alert
-                # TODO push notif to caregiver using token
                 state = "outside"
                 alerted = True
+                await send_push(
+                    [user.expo_push_token] if user.expo_push_token else [],
+                    title="Alert! Left safe zone.",
+                    body=f"Care recipient {user.name} detected exiting home area at {now}",
+                    data={
+                        "type": "geofence_exit",
+                        "recipient_id": recipient.id,
+                        "recipient_name": recipient.display_name,
+                        "dist_in_m": round(dist, 1),
+                        "event_at": now,
+                    },
+                    priority="high",
+                    sound="default",
+                )
             elif (not currently_outside) and prev == "outside":
                 # re-entry transition
-                # TODO push notif to caregiver using token
                 state = "inside"
                 alerted = True
+                await send_push(
+                    [user.expo_push_token] if user.expo_push_token else [],
+                    title="OK. Back in safe zone",
+                    body="Your care recipient is back inside the safe zone.",
+                    data={
+                        "type": "geofence_entry",
+                        "recipient_id": recipient.id,
+                        "recipient_name": recipient.display_name,
+                        "dist_in_m": round(dist, 1),
+                        "event_at": now,
+                    },
+                    priority="default",
+                    sound="default",
+                )
             else:
                 state = prev
-                alerted = True
 
         user.geofence_state = state
 

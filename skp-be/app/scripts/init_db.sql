@@ -42,4 +42,15 @@ CREATE TABLE connections (
 
 CREATE UNIQUE INDEX idx_connections_code ON connections (code);
 
+CREATE TABLE IF NOT EXISTS notifications (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    type TEXT NOT NULL CHECK (type IN ('nudge', 'geofence_exit', 'geofence_entry')),
+    payload JSONB DEFAULT '{}' :: jsonb,
+    created_at TIMESTAMP DEFAULT NOW(),
+    read_at TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);
+
 COMMIT;

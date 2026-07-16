@@ -6,7 +6,7 @@ from app.config import CORS_ORIGINS
 from app.routers import auth
 from app.routers import location
 from app.routers import connect
-
+from app.routers import nudge
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -38,6 +38,7 @@ else:
 app.include_router(auth.router)
 app.include_router(location.router)
 app.include_router(connect.router)
+app.include_router(nudge.router)
 
 @app.get("/")
 def root():
