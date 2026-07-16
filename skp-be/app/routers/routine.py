@@ -68,7 +68,7 @@ async def read_routines(skip: int = 0, limit: int = 100, db: AsyncSession = Depe
     return result.scalars().all()
 
 
-@router.get("/{routine_id}", response_model=RoutineSchema)
+@router.get("/{routine_id:int}", response_model=RoutineSchema)
 async def read_routine(routine_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(Routine).where(and_(Routine.id == routine_id, Routine.deleted_at.is_(None)))
@@ -441,7 +441,7 @@ async def delete_routine_schedule(schedule_id: int, db: AsyncSession = Depends(g
     await db.commit()
     return None
 
-@router.get("/routine_schedule/{caregiver_id}/{carerecipient_id}/{routineschedule_date}", response_model=RoutineSchedulesByDateResponse)
+@router.get("/schedule/{caregiver_id}/{carerecipient_id}/{routineschedule_date}", response_model=RoutineSchedulesByDateResponse)
 async def get_routine_schedules_by_date(
     caregiver_id: int, 
     carerecipient_id: int, 
@@ -494,7 +494,7 @@ async def get_routine_schedules_by_date(
     )
 
 
-@router.get("/routine_schedule/{caregiver_id}/{carerecipient_id}/status/{routineschedule_status}", response_model=RoutineSchedulesByStatusResponse)
+@router.get("/schedule/{caregiver_id}/{carerecipient_id}/status/{routineschedule_status}", response_model=RoutineSchedulesByStatusResponse)
 async def get_routine_schedules_by_status(
     caregiver_id: int, 
     carerecipient_id: int, 

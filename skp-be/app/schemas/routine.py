@@ -135,7 +135,7 @@ class RoutineSchedule(BaseModel):
 class RoutineSettingWithCategory(BaseModel):
     id: int
     name: str
-    color: str
+    color: Optional[str] = None
 
     class Config:
         from_attributes = True

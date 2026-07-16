@@ -26,15 +26,6 @@ CREATE TABLE IF NOT EXISTS locations (
     PRIMARY KEY (id) FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
--- Create Users table (Referenced by routines for caregiver and care recipient)
-CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    display_name VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    deleted_at TIMESTAMP WITH TIME ZONE
-);
-
 -- Create Routine Categories table
 CREATE TABLE IF NOT EXISTS routine_categories (
     id SERIAL PRIMARY KEY,
@@ -87,7 +78,7 @@ CREATE TABLE IF NOT EXISTS routine_settings (
 -- Create Routine Schedules table
 CREATE TABLE IF NOT EXISTS routine_schedules (
     id SERIAL PRIMARY KEY,
-    routine_id INT NOT NULL,
+    routine_id INT NOT NULL,    
     setting_id INT NOT NULL,
     start_time TIMESTAMP WITH TIME ZONE NOT NULL,
     end_time TIMESTAMP WITH TIME ZONE NOT NULL,
