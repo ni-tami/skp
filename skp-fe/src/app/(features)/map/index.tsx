@@ -151,7 +151,7 @@ export default function MapScreen() {
           <Link href='/map/viewer'>
             <View className='flex flex-row items-center justify-between rounded-b-xl bg-white w-full px-4 py-6'>
               <StyledText size={16} className='font-semibold'>
-                Prabowo is still in the safe zone
+                You are still in the safe zone
               </StyledText>
               <Ionicons
                 name={'chevron-forward-outline'}
