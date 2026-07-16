@@ -10,7 +10,7 @@ from sqlalchemy import (
     Time,
     ForeignKey,
     Text,
-    ARRAY,
+    JSON,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -73,7 +73,7 @@ class RoutineSetting(Base):
     end_time: Mapped[time] = mapped_column(Time, nullable=False)
     interval: Mapped[int] = mapped_column(Integer, nullable=False)  # in minutes
     repeat_type: Mapped[str] = mapped_column(String, nullable=False, default="ONCE")  # ONCE, DAILY, WEEKLY, MONTHLY, CUSTOM
-    day_of_week: Mapped[Optional[List[int]]] = mapped_column(ARRAY(Integer), nullable=True)  # [1,2,3,...,7]
+    day_of_week: Mapped[Optional[List[int]]] = mapped_column(JSON, nullable=True)  # [1,2,3,...,7]
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     deleted_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)

@@ -7,7 +7,7 @@ from app.db.connection import init_db
 from app.routers import auth
 from app.routers import location
 from app.routers import connect
-
+from app.routers import routine
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -39,6 +39,7 @@ else:
 app.include_router(auth.router)
 app.include_router(location.router)
 app.include_router(connect.router)
+app.include_router(routine.router)
 
 @app.get("/")
 def root():
