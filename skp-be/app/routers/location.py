@@ -9,16 +9,16 @@ from app.models.location import Location
 from app.schemas.location import Location as LocationSchema
 from app.schemas.location import LocationCreate, LocationUpdate
 
-location_router = APIRouter(prefix="/locations", tags=["location"])
+router = APIRouter(prefix="/locations", tags=["location"])
 
 
-@location_router.get("/", response_model=list[LocationSchema])
+@router.get("/", response_model=list[LocationSchema])
 async def list_locations(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Location).where(Location.deleted_at.is_(None)))
     return result.scalars().all()
 
 
-@location_router.get("/{location_id}", response_model=LocationSchema)
+@router.get("/{location_id}", response_model=LocationSchema)
 async def get_location(location_id: int, db: AsyncSession = Depends(get_db)):
     location = await db.get(Location, location_id)
     if location is None or location.deleted_at is not None:
@@ -29,7 +29,7 @@ async def get_location(location_id: int, db: AsyncSession = Depends(get_db)):
     return location
 
 
-@location_router.post(
+@router.post(
     "/", response_model=LocationSchema, status_code=status.HTTP_201_CREATED
 )
 async def create_location(payload: LocationCreate, db: AsyncSession = Depends(get_db)):
@@ -48,7 +48,7 @@ async def create_location(payload: LocationCreate, db: AsyncSession = Depends(ge
     return location
 
 
-@location_router.patch("/{location_id}", response_model=LocationSchema)
+@router.patch("/{location_id}", response_model=LocationSchema)
 async def update_location(
     location_id: int,
     payload: LocationUpdate,
@@ -71,7 +71,7 @@ async def update_location(
     return location
 
 
-@location_router.delete("/{location_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{location_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def clear_location(location_id: int, db: AsyncSession = Depends(get_db)):
     """Hard-delete a location by id."""
     location = await db.get(Location, location_id)
@@ -84,7 +84,7 @@ async def clear_location(location_id: int, db: AsyncSession = Depends(get_db)):
     await db.commit()
 
 
-@location_router.post("/{location_id}/clear", status_code=status.HTTP_204_NO_CONTENT)
+@router.post("/{location_id}/clear", status_code=status.HTTP_204_NO_CONTENT)
 async def soft_clear_location(location_id: int, db: AsyncSession = Depends(get_db)):
     """Soft-delete a location by id (sets deleted_at)."""
     location = await db.get(Location, location_id)
