@@ -2,7 +2,7 @@ BEGIN (implicit)
 PRAGMA main.table_...info("users")
 PRAGMA main.table_...info("locations")
 
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
@@ -13,17 +13,31 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP NOT NULL,
     deleted_at TIMESTAMP,
     status TEXT DEFAULT 'available' CHECK (status IN ('available','busy')),
+    -- geofence
+    home_lat DOUBLE PRECISION,
+    home_lng DOUBLE PRECISION,
+    home_radius_in_m DOUBLE PRECISION,
+    -- last known position
+    last_lat DOUBLE PRECISION,
+    last_lng DOUBLE PRECISION,
+    last_accuracy DOUBLE PRECISION,
+    last_seen_at TIMESTAMP,
+    geofence_state TEXT CHECK (
+        geofence_state IN ('inside', 'outside')
+        OR geofence_state IS NULL
+    ),
 );
 
-CREATE TABLE IF NOT EXISTS locations (
+CREATE TABLE connections (
     id INTEGER NOT NULL,
-    user_id INTEGER NOT NULL,
-    latitude INTEGER NOT NULL,
-    longitude INTEGER,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
-    deleted_at TIMESTAMP,
-    PRIMARY KEY (id) FOREIGN KEY (user_id) REFERENCES users (id)
+    caregiver_id INTEGER NOT NULL,
+    recipient_id INTEGER NOT NULL,
+    code VARCHAR(8) NOT NULL,
+    accepted BOOLEAN,
+    created_at DATETIME,
+    PRIMARY KEY (id),
+    FOREIGN KEY(caregiver_id) REFERENCES users (id),
+    FOREIGN KEY(recipient_id) REFERENCES users (id)
 );
 
 -- Create Routine Categories table
@@ -99,5 +113,6 @@ CREATE INDEX IF NOT EXISTS idx_routines_caregiver ON routines(caregiver_id) WHER
 CREATE INDEX IF NOT EXISTS idx_routines_care_recipient ON routines(care_recipient_id) WHERE deleted_at IS NULL;
 CREATE INDEX IF NOT EXISTS idx_schedules_date ON routine_schedules(CAST(start_time AS DATE)) WHERE deleted_at IS NULL;
 CREATE INDEX IF NOT EXISTS idx_schedules_status ON routine_schedules(status) WHERE deleted_at IS NULL;
+CREATE UNIQUE INDEX idx_connections_code ON connections (code);
 
 COMMIT;

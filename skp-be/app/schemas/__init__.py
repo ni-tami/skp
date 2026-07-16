@@ -1,5 +1,5 @@
-from app.schemas.location import Location, LocationBase, LocationCreate, LocationUpdate
 from app.schemas.connect import GenerateCodeOut, ConnectOut
+from app.schemas.location import GeofenceIn, GeofenceOut, PointAck, PointIn
 from app.schemas.routine import (
     # Categories
     RoutineCategory,
@@ -30,15 +30,12 @@ from app.schemas.routine import (
 )
 
 __all__ = [
-    # Location Schemas
-    "Location",
-    "LocationBase",
-    "LocationCreate",
-    "LocationUpdate",
-    
-    # Connection Schemas
     "ConnectOut",
     "GenerateCodeOut",
+    "GeofenceIn",
+    "GeofenceOut",
+    "PointAck",
+    "PointIn",
     
     # Routine Category Schemas
     "RoutineCategory",

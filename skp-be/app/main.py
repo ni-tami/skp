@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import CORS_ORIGINS
-from app.db.connection import init_db
 from app.routers import auth
 from app.routers import location
 from app.routers import connect
@@ -11,8 +10,8 @@ from app.routers import routine
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # create tables if not exist (works for sqlite dev; for Supabase prefer init_db.sql)
-    await init_db()
+    # Database schema is managed by Alembic migrations (see migrations/README).
+    # Run `make migrate` to apply pending migrations.
     yield
 
 
