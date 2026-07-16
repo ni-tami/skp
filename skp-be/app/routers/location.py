@@ -48,7 +48,7 @@ async def set_geofence(
     db: Session = Depends(get_db),
     user: User = Depends(require_role("caregiver")),
 ):
-    _check_already_accept_connect(db, user.id, body.recipient_id)
+    await _check_already_accept_connect(db, user.id, body.recipient_id)
     recipient = await db.get(User, body.recipient_id)
     if not recipient or recipient.role != "recipient":
         raise HTTPException(status_code=404, detail="recipient not found")
@@ -82,7 +82,7 @@ async def get_geofence(
         if user.id != recipient_id:
             raise HTTPException(status_code=403, detail="not your geofence")
     else:
-        _check_already_accept_connect(db, user.id, recipient_id)
+        await _check_already_accept_connect(db, user.id, recipient_id)
     r = db.get(User, recipient_id)
     if not r:
         raise HTTPException(status_code=404, detail="recipient not found")
@@ -105,7 +105,7 @@ async def clear_geofence(
     db: Session = Depends(get_db),
     user: User = Depends(require_role("caregiver")),
 ):
-    _check_already_accept_connect(db, user.id, recipient_id)
+    await _check_already_accept_connect(db, user.id, recipient_id)
     r = db.get(User, recipient_id)
     if not r:
         raise HTTPException(status_code=404, detail="recipient not found")
@@ -135,9 +135,7 @@ async def post_point(
 
     if user.home_lat is not None and user.home_lng is not None and user.home_radius_in_m:
         dist = _haversine_m(body.lat, body.lng, user.home_lat, user.home_lng)
-        print("dist:", dist)
         currently_outside = dist > user.home_radius_in_m
-        print("radius in meters:", user.home_radius_in_m)
 
         prev = user.geofence_state
         # TODO handle alert
@@ -148,17 +146,14 @@ async def post_point(
             if currently_outside and prev != "outside":
                 # exit zone transition -> alert
                 # TODO push notif to caregiver using token
-                print("exit zone transition -> alert")
                 state = "outside"
                 alerted = True
             elif (not currently_outside) and prev == "outside":
                 # re-entry transition
                 # TODO push notif to caregiver using token
-                print("re entry")
                 state = "inside"
                 alerted = True
             else:
-                print("dunathing")
                 state = prev
                 alerted = True
 
@@ -185,8 +180,9 @@ async def get_last(
             raise HTTPException(
                 status_code=400, detail="recipient_id required for caregiver"
             )
-        _check_already_accept_connect(db, user.id, recipient_id)
-        r = db.get(User, recipient_id)
+
+        await _check_already_accept_connect(db, user.id, recipient_id)
+        r = await db.get(User, recipient_id)
         if not r:
             raise HTTPException(status_code=404, detail="recipient not found")
     return GeofenceOut(
