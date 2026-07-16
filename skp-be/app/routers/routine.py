@@ -33,6 +33,7 @@ from app.schemas import (
 
 )
 from app.utility.schedule_generator import generate_schedules_for_week 
+from typing_extensions import Literal
 
 # Placeholder dependency for your database session
 from app.db.connection import get_db
@@ -441,28 +442,46 @@ async def delete_routine_schedule(schedule_id: int, db: AsyncSession = Depends(g
     await db.commit()
     return None
 
-@router.get("/schedule/{caregiver_id}/{carerecipient_id}/{routineschedule_date}", response_model=RoutineSchedulesByDateResponse)
+@router.get("/schedule/{type}/{caregiver_id}/{carerecipient_id}/{routineschedule_date}", response_model=RoutineSchedulesByDateResponse)
 async def get_routine_schedules_by_date(
+    type: Literal["caregiver", "carerecipient"],
     caregiver_id: int, 
     carerecipient_id: int, 
     routineschedule_date: date_type, 
     db: AsyncSession = Depends(get_db)
 ):
-    # Query schedules that occur on the requested date matching structural constraints
+    base_conditions = [
+        Routine.care_recipient_id == carerecipient_id,
+        func.date(RoutineSchedule.start_time) == routineschedule_date,
+        RoutineSchedule.deleted_at.is_(None)
+    ]
+    
+    if type == "caregiver":
+        try:
+            int_caregiver_id = int(caregiver_id)
+        except ValueError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="caregiver_id must be an integer when type is 'caregiver'"
+            )
+        base_conditions.append(Routine.caregiver_id == int_caregiver_id)
+        
+    elif type == "carerecipient":
+        pass
+        
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid type parameter. Use 'caregiver' or 'carerecipient'."
+        )
+
     stmt = (
         select(RoutineSchedule)
         .join(RoutineSchedule.routine)
         .options(
             joinedload(RoutineSchedule.routine).joinedload(Routine.category)
         )
-        .where(
-            and_(
-                Routine.caregiver_id == caregiver_id,
-                Routine.care_recipient_id == carerecipient_id,
-                func.date(RoutineSchedule.start_time) == routineschedule_date,
-                RoutineSchedule.deleted_at.is_(None)
-            )
-        )
+        .where(and_(*base_conditions))
     )
 
     result = await db.execute(stmt)
