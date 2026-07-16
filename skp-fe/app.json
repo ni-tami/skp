@@ -53,6 +53,12 @@
           "locationWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location to track your safe zone.",
           "isAndroidBackgroundLocationEnabled": true
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#208AEF"
+        }
       ]
     ],
     "experiments": {

@@ -5,8 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b6a96f1b-52c2-4e8b-8991-98093193870d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/android-icon-background.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/android-icon-foreground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/android-icon-monochrome.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/expo.icon/Assets/expo-symbol 2.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/expo.icon/Assets/grid.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/expo.icon/icon.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/favicon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/src/lib/geofence-task.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/src/lib/notification.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/src/lib/permission.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/skp-fe/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/skp-fe/app.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/skp-fe/src/app/(features)/map/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/skp-fe/src/app/(features)/map/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/skp-fe/src/app/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/skp-fe/src/app/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/skp-fe/src/stores/location-store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/skp-fe/src/stores/location-store.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +46,7 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",

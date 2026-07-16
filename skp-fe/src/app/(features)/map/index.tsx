@@ -1,4 +1,4 @@
-import { Pressable, View } from 'react-native';
+import { Alert, Pressable, Switch, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import StyledText from '@/components/ui/StyledText';
 import {
@@ -10,10 +10,34 @@ import {
   ShapeSource,
   UserLocation,
 } from '@rnmapbox/maps';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import circle from '@turf/circle';
 import { useLocationStore } from '@/stores/location-store';
 import { Link } from 'expo-router';
+import { requestGeofencePermissions, ensureNotificationPermission } from '@/lib/permission';
+import { startSafeZoneGeofencing, stopSafeZoneGeofencing } from '@/lib/geofence-task';
+
+async function ensureMonitoringPermissions(): Promise<boolean> {
+  const permissions = await requestGeofencePermissions();
+
+  if (!permissions.foreground) {
+    Alert.alert("Permission needed", "Location access is required to monitor safe zone.");
+    return false;
+  }
+  if (!permissions.background) {
+    Alert.alert(
+      "Background access needed",
+      "Choose \"Always Allow\" in Settings so monitoring still works when the app is closed."
+    );
+    return false;
+  }
+  if (!(await ensureNotificationPermission())) {
+    Alert.alert("Notifications disabled", "Enable notifications to get safe zone alert.");
+    return false;
+  }
+
+  return true;
+}
 
 export default function MapScreen() {
   const currentPosition = useLocationStore((state) => state.currentPosition);
@@ -22,6 +46,29 @@ export default function MapScreen() {
   );
   const target = useLocationStore((state) => state.targetLocation);
   const radius = useLocationStore((state) => state.radius);
+  const monitoring = useLocationStore((state) => state.monitoring);
+  const setMonitoring = useLocationStore((state) => state.setMonitoring);
+
+  const handleToggleMonitoring = async (value: boolean) => {
+    if (!value) {
+      await stopSafeZoneGeofencing();
+      setMonitoring(false);
+      return;
+    }
+
+    if (!target || !radius) {
+      Alert.alert("No safe zone set", "Set a safe zone before enabling monitoring.");
+      return;
+    }
+
+    const granted = await ensureMonitoringPermissions().catch(() => false);
+    setMonitoring(granted);
+  };
+
+  useEffect(() => {
+    if (!monitoring || !target) return;
+    startSafeZoneGeofencing(target, radius);
+  }, [monitoring, target, radius]);
 
   const cameraRef = useRef<Camera>(null);
 
@@ -101,18 +148,18 @@ export default function MapScreen() {
               <Ionicons name='locate' size={22} color='#208AEF' />
             </Pressable>
           </View>
-          <View className='flex flex-row items-center justify-between rounded-b-xl bg-white w-full px-4 py-6'>
-            <StyledText size={16} className='font-semibold'>
-              Prabowo is still in the safe zone
-            </StyledText>
-            <Link href='/map/viewer'>
+          <Link href='/map/viewer'>
+            <View className='flex flex-row items-center justify-between rounded-b-xl bg-white w-full px-4 py-6'>
+              <StyledText size={16} className='font-semibold'>
+                Prabowo is still in the safe zone
+              </StyledText>
               <Ionicons
                 name={'chevron-forward-outline'}
                 size={20}
                 color='#242424'
               />
-            </Link>
-          </View>
+            </View>
+          </Link>
         </View>
         <Link href='/map/picker'>
           <View className='flex justify-between flex-row items-center rounded-xl bg-white w-full p-4'>
@@ -131,6 +178,14 @@ export default function MapScreen() {
             />
           </View>
         </Link>
+        {target && radius && (
+          <View className='flex flex-row items-center justify-end mt-2'>
+            <StyledText size={16} className='font-semibold'>
+              Notify me within {radius}m
+            </StyledText>
+            <Switch value={monitoring} onValueChange={handleToggleMonitoring} />
+          </View>
+        )}
       </View>
     </View>
   );
