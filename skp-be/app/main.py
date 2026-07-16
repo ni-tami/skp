@@ -2,14 +2,14 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.config import CORS_ORIGINS, Base, engine
+from app.config import CORS_ORIGINS
+from app.db.connection import init_db
 from app.routers import auth
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # create tables if not exist (works for sqlite dev; for Supabase prefer init_db.sql)
-    
-    Base.metadata.create_all(bind=engine)
+    await init_db()
     yield
 
 
