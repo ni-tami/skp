@@ -53,11 +53,16 @@ export default function MapScreen() {
               pulsing='default'
             />
           </MapView>
-          <View className='flex flex-row items-center justify-start rounded-b-xl bg-white w-full p-4'>
+          <View className='flex flex-row items-center justify-start rounded-b-xl bg-white w-full py-6 px-4'>
             <StyledText size={14} className='font-semibold'>
               Prabowo is still in the safe zone
             </StyledText>
           </View>
+        </View>
+        <View className='flex justify-between flex-row items-center rounded-xl bg-white w-full py-6 px-4 my-2'>
+          <StyledText size={14} className='font-semibold'>
+            Set your safe zone
+          </StyledText>
         </View>
       </View>
     </View>
