@@ -1,4 +1,11 @@
-from app.schemas.location import Location, LocationBase, LocationCreate, LocationUpdate
 from app.schemas.connect import GenerateCodeOut, ConnectOut
+from app.schemas.location import GeofenceIn, GeofenceOut, PointAck, PointIn
 
-__all__ = ["Location", "LocationBase", "LocationCreate", "LocationUpdate", "ConnectOut", "GenerateCodeOut"]
+__all__ = [
+    "ConnectOut",
+    "GenerateCodeOut",
+    "GeofenceIn",
+    "GeofenceOut",
+    "PointAck",
+    "PointIn",
+]

@@ -17,3 +17,14 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime)
     updated_at: Mapped[datetime] = mapped_column(DateTime)
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    # geofence (set by caregiver): home + safe radius
+    home_lat = Column(Float, nullable=True)
+    home_lng = Column(Float, nullable=True)
+    home_radius_in_m = Column(Float, nullable=True)
+    # last known position (from recipient's POST /locations/point)
+    last_lat = Column(Float, nullable=True)
+    last_lng = Column(Float, nullable=True)
+    last_accuracy = Column(Float, nullable=True)
+    last_seen_at = Column(DateTime, nullable=True)
+    geofence_state = Column(String, nullable=True)  # 'inside' | 'outside' | NULL
+    created_at = Column(DateTime, default=datetime.utcnow)
