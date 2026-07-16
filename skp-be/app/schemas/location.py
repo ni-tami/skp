@@ -1,28 +1,36 @@
+from pydantic import BaseModel, Field
+from typing import Optional
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict
+# ---------- Location ----------
+class GeofenceIn(BaseModel):
+    recipient_id: int
+    home_lat: float
+    home_lng: float
+    home_radius_in_m: float = Field(gt=0)
 
 
-class LocationBase(BaseModel):
-    user_id: int
-    latitude: float
-    longitude: float | None = None
+class GeofenceOut(BaseModel):
+    recipient_id: int
+
+    home_lat: Optional[float] = None
+    home_lng: Optional[float] = None
+    home_radius_in_m: Optional[float] = None
+    last_lat: Optional[float] = None
+    last_lng: Optional[float] = None
+    last_accuracy: Optional[float] = None
+    last_seen_at: Optional[datetime] = None
+    geofence_state: Optional[str] = None
 
 
-class LocationCreate(LocationBase):
-    pass
+
+class PointIn(BaseModel):
+    lat: float
+    lng: float
+    accuracy: Optional[float] = None
 
 
-class LocationUpdate(BaseModel):
-    user_id: int | None = None
-    latitude: float | None = None
-    longitude: float | None = None
-
-
-class Location(LocationBase):
-    id: int
-    created_at: datetime
-    updated_at: datetime
-    deleted_at: datetime | None = None
-
-    model_config = ConfigDict(from_attributes=True)
+class PointAck(BaseModel):
+    ok: bool = True
+    state: Optional[str] = None
+    alerted: bool = False
