@@ -179,7 +179,7 @@ export default function MapScreen() {
           </View>
         </Link>
         {target && radius && (
-          <View className='flex flex-row items-center justify-end mt-2'>
+          <View className='flex flex-row items-center justify-start mt-2'>
             <StyledText size={16} className='font-semibold'>
               Notify me within {radius}m
             </StyledText>

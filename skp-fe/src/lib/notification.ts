@@ -18,3 +18,13 @@ export async function sendExitNotification(): Promise<void> {
     trigger: null,
   });
 }
+
+export async function sendApproachingEdgeNotification(): Promise<void> {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "Getting close to the edge",
+      body: "You're nearing the edge of the safe zone.",
+    },
+    trigger: null,
+  });
+}
