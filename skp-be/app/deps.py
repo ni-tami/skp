@@ -1,9 +1,9 @@
 from fastapi import Depends, HTTPException, status, Header
 from sqlalchemy.orm import Session
 
-from .config import SessionLocal
-from .models import User
-from .security import decode_token
+from app.config import SessionLocal
+from app.models import User
+from app.security import decode_token
 
 
 def get_db():

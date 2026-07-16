@@ -2,28 +2,28 @@ import os
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from app.models.base import Base
+from app.config import Base
 
 DEFAULT_DATABASE_URL = "sqlite+aiosqlite:///./local.db"
 
-_raw_url = os.getenv("DB_CONNECTION_URL", "")
-DB_CONNECTION_URL = _raw_url if _raw_url.strip() else DEFAULT_DATABASE_URL
+_raw_url = os.getenv("DATABASE_URL", "")
+DATABASE_URL = _raw_url if _raw_url.strip() else DEFAULT_DATABASE_URL
 
-if DB_CONNECTION_URL.startswith("sqlite"):
+if DATABASE_URL.startswith("sqlite"):
     engine = create_async_engine(
-        DB_CONNECTION_URL,
+        DATABASE_URL,
         echo=False,
         connect_args={"check_same_thread": False}
-        if "aiosqlite" in DB_CONNECTION_URL
+        if "aiosqlite" in DATABASE_URL
         else {},
     )
-elif DB_CONNECTION_URL.startswith("postgresql"):
+elif DATABASE_URL.startswith("postgresql"):
     engine = create_async_engine(
-        DB_CONNECTION_URL,
+        DATABASE_URL,
         echo=False,
     )
 else:
-    raise ValueError(f"Unsupported database URL scheme: {DB_CONNECTION_URL}")
+    raise ValueError(f"Unsupported database URL scheme: {DATABASE_URL}")
 
 AsyncSessionLocal = async_sessionmaker(
     bind=engine,

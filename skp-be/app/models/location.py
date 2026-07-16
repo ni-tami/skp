@@ -3,15 +3,14 @@ from datetime import datetime
 from sqlalchemy import DateTime, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.models.base import Base
-
+from app.config import Base
 
 class Location(Base):
-    __tablename__ = "location"
+    __tablename__ = "locations"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("user_account.id"), nullable=False
+        Integer, ForeignKey("users.id"), nullable=False
     )
     latitude: Mapped[float] = mapped_column(Float, nullable=False)
     longitude: Mapped[float | None] = mapped_column(Float, nullable=True)

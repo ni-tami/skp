@@ -1,6 +1,6 @@
 .PHONY: run
 run:
-	uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000
+	uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 
 .PHONY: initdb
 initdb:
@@ -24,7 +24,7 @@ install:
 
 .PHONY: dev
 dev:
-	uv sync --dev && uv run uvicorn main:app --reload --host 127.0.0.1 --port 8000
+	uv sync --dev && uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 
 .PHONY: clean
 clean:
