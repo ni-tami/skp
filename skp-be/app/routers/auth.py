@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -19,7 +21,9 @@ async def signup(body: SignupIn, db: AsyncSession = Depends(get_db)):
         email=body.email,
         password_hash=hash_password(body.password),
         role=body.role,
-        display_name=body.display_name
+        display_name=body.display_name,
+        created_at=datetime.utcnow(),
+        updated_at=datetime.utcnow(),
     )
     db.add(user)
     await db.commit()

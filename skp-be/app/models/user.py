@@ -14,6 +14,6 @@ class User(Base):
     display_name = Column(String, default="")
     expo_push_token = Column(String, default=None)
     status = Column(String, default="available")  # 'available' | 'busy'
-    created_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
-    updated_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime)
+    updated_at: Mapped[datetime] = mapped_column(DateTime)
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
