@@ -2,7 +2,7 @@ import math
 from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.utility.push import send_push
 
@@ -22,7 +22,7 @@ def _haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     return 2 * R * math.asin(math.sqrt(a))
 
 
-async def _check_already_accept_connect(db: Session, caregiver_id: int, recipient_id: int) -> None:
+async def _check_already_accept_connect(db: AsyncSession, caregiver_id: int, recipient_id: int) -> None:
     result = (
         await db.execute(select(Connection)
         .filter_by(caregiver_id=caregiver_id, recipient_id=recipient_id, accepted=True))
@@ -32,22 +32,20 @@ async def _check_already_accept_connect(db: Session, caregiver_id: int, recipien
         raise HTTPException(status_code=403, detail="not linked to recipient")
 
 
-def _fetch_caregiver_tokens(db: Session, recipient_id: int) -> list[str]:
-    # NOTE used in sending push notification
-    rows = (
-        db.query(User)
+async def _fetch_caregiver_tokens(db: AsyncSession, recipient_id: int) -> list[str]:
+    result = await db.execute(
+        select(User.expo_push_token)
         .join(Connection, Connection.caregiver_id == User.id)
         .filter(Connection.recipient_id == recipient_id, Connection.accepted == True)  # noqa: E712
-        .all()
     )
-    return [u.expo_push_token for u in rows if u.expo_push_token]
+    return [token for token in result.scalars().all() if token]
 
 
 # --- Geofence management (caregiver) ---
 @router.post("/geofence", response_model=GeofenceOut)
 async def set_geofence(
     body: GeofenceIn,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("caregiver")),
 ):
     await _check_already_accept_connect(db, user.id, body.recipient_id)
@@ -77,7 +75,7 @@ async def set_geofence(
 @router.get("/geofence", response_model=GeofenceOut)
 async def get_geofence(
     recipient_id: int,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
     if user.role == "recipient":
@@ -104,7 +102,7 @@ async def get_geofence(
 @router.delete("/geofence")
 async def clear_geofence(
     recipient_id: int,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("caregiver")),
 ):
     await _check_already_accept_connect(db, user.id, recipient_id)
@@ -123,7 +121,7 @@ async def clear_geofence(
 @router.post("/point", response_model=PointAck)
 async def post_point(
     body: PointIn,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("recipient")),
 ):
     now = datetime.now(timezone.utc).replace(tzinfo=None)
@@ -184,7 +182,6 @@ async def post_point(
                 )
             else:
                 state = prev
-                alerted = True
 
         user.geofence_state = state
 
@@ -199,7 +196,7 @@ async def post_point(
 @router.get("/last", response_model=GeofenceOut)
 async def get_last(
     recipient_id: int | None = None,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
     if user.role == "recipient":

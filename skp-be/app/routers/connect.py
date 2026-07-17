@@ -1,7 +1,8 @@
 import secrets
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from ..deps import get_db, get_current_user, require_role
 from ..models import User, Connection
@@ -16,7 +17,7 @@ def _gen_code() -> str:
 
 @router.post("/generate", response_model=GenerateCodeOut)
 async def generate_code(
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("recipient")),
 ):
     code = _gen_code()
@@ -30,10 +31,14 @@ async def generate_code(
 @router.post("/{code}/accept", response_model=ConnectOut)
 async def accept_code(
     code: str,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("caregiver")),
 ):
-    result = await db.execute(select(Connection).filter_by(code=code, accepted=False))
+    result = await db.execute(
+        select(Connection)
+        .filter_by(code=code, accepted=False)
+        .options(selectinload(Connection.recipient), selectinload(Connection.caregiver))
+    )
     connection = result.scalar_one_or_none()
     if not connection:
         raise HTTPException(status_code=404, detail="invalid or already-used code")
@@ -42,16 +47,25 @@ async def accept_code(
     connection.caregiver_id = user.id
     connection.accepted = True
     await db.commit()
-    await db.refresh(connection)
+    result = await db.execute(
+        select(Connection)
+        .where(Connection.id == connection.id)
+        .options(selectinload(Connection.recipient), selectinload(Connection.caregiver))
+    )
+    connection = result.scalar_one()
     return connection
 
 
 @router.get("", response_model=list[ConnectOut])
 async def get_connection(
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    stmt = select(Connection).where(Connection.accepted == True)  # noqa: E712
+    stmt = (
+        select(Connection)
+        .where(Connection.accepted == True)  # noqa: E712
+        .options(selectinload(Connection.recipient), selectinload(Connection.caregiver))
+    )
     if user.role == "caregiver":
         stmt = stmt.where(Connection.caregiver_id == user.id)
     else:
@@ -63,7 +77,7 @@ async def get_connection(
 @router.delete("/{connection_id}")
 async def delete_connection(
     connection_id: int,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
     connection = await db.get(Connection, connection_id)
