@@ -71,6 +71,11 @@ export default function MapScreen() {
 
   useEffect(() => {
     if (!geofence) return;
+    const hasGeofence =
+      geofence.home_lat !== 0 &&
+      geofence.home_lng !== 0 &&
+      geofence.home_radius_in_m > 1;
+    if (!hasGeofence) return;
     setTargetLocation({
       latitude: geofence.home_lat,
       longitude: geofence.home_lng,
