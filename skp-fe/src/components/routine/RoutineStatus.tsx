@@ -1,16 +1,15 @@
 import { ROUTINE_STATUS } from '@/constants/routine';
-import { USER_FONT_CAREGIVER, USER_FONT_CARERECIPIENT } from '@/constants/user';
-import { RoutineCompletion } from '@/services/routine';
+import { RoutineSchedule } from '@/services/routine';
+import { getUserFont } from '@/utils/user';
 import { Ionicons } from '@expo/vector-icons';
 import { Text, View } from 'react-native';
 
 interface Props {
-    item: RoutineCompletion;
-    isCaregiver: boolean;
+    item: RoutineSchedule;
 }
 
-export default function RoutineStatus({ item, isCaregiver }: Props) {
-    const USER_FONT = isCaregiver ? USER_FONT_CAREGIVER : USER_FONT_CARERECIPIENT;
+export default function RoutineStatus({ item }: Props) {
+    const USER_FONT = getUserFont();
 
     const status = ROUTINE_STATUS[item.status];
 

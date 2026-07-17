@@ -13,21 +13,21 @@ export const DASHBOARD_SECTIONS = [
   },
   {
     id: "schedules",
-    title: "Routine Schedules",
+    title: "Routine Settings",
     subtitle: "Set up schedules of the routines",
     icon: "calendar-outline" as const,
     color: "#059669",
     bgColor: "#ECFDF5",
-    route: "/routine/caregiver/schedule/list",
+    route: "/routine/caregiver/setting/list",
   },
   {
     id: "entries",
-    title: "Routine Entries",
+    title: "Routine Schedule",
     subtitle: "Track completion status and timestamps",
     icon: "checkmark-done-circle-outline" as const,
     color: "#7C3AED",
     bgColor: "#F5F3FF",
-    route: "/routine/caregiver/entries",
+    route: "/routine/schedule",
   },
 ];
 

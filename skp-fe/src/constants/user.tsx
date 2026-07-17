@@ -1,8 +1,8 @@
 export type UserRole = (typeof USER_ROLE)[keyof typeof USER_ROLE];
 
 export const USER_ROLE = {
-  CAREGIVER: "CareGiver",
-  CARE_RECIPIENT: "CareRecipient",
+  CAREGIVER: "caregiver",
+  CARE_RECIPIENT: "carerecipient",
 }
 
 export const USER_FONT_CAREGIVER = {
