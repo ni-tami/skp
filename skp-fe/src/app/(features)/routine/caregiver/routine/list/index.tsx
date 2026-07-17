@@ -2,6 +2,7 @@ import { ActionButtons } from "@/components/routine/ActionButtons";
 import { Badge } from "@/components/shared/Badge";
 import { FloatingButton } from "@/components/shared/FloatingButton";
 import { SearchBar } from "@/components/shared/SearchBar";
+import { DUMMY_SCHEDULES } from "@/constants/dummy";
 import { CATEGORY_ICON_MAPPING, IconName } from "@/constants/routine";
 import { getRoutinesQueryOpt } from "@/services/queryOptions/routineQueryOpt";
 import { Ionicons } from "@expo/vector-icons";
@@ -53,7 +54,7 @@ export default function RoutineListScreen() {
     );
   };
 
-  const filteredRoutines = routines?.filter((item) => {
+  const filteredRoutines = DUMMY_SCHEDULES?.filter((item) => {
     const query = searchQuery.toLowerCase();
     const matchTitle = item.title.toLowerCase().includes(query);
     const matchDetail = item.detail?.toLowerCase().includes(query) ?? false;
