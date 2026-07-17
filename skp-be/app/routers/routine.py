@@ -467,30 +467,22 @@ async def delete_routine_schedule(schedule_id: int, db: AsyncSession = Depends(g
 
 @router.get("/schedule/{type}/{caregiver_id}/{carerecipient_id}/{routineschedule_date}", response_model=RoutineSchedulesByDateResponse)
 async def get_routine_schedules_by_date(
-    type: Literal["caregiver", "recipient"],
+    type: Literal["caregiver", "carerecipient"],
     caregiver_id: int, 
     carerecipient_id: int, 
     routineschedule_date: date_type, 
     db: AsyncSession = Depends(get_db), User = Depends(get_current_user)
 ):
     base_conditions = [
-        Routine.care_recipient_id == carerecipient_id,
         func.date(RoutineSchedule.start_time) == routineschedule_date,
         RoutineSchedule.deleted_at.is_(None)
     ]
     
     if type == "caregiver":
-        try:
-            int_caregiver_id = int(caregiver_id)
-        except ValueError:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="caregiver_id must be an integer when type is 'caregiver'"
-            )
-        base_conditions.append(Routine.caregiver_id == int_caregiver_id)
+        base_conditions.append(Routine.caregiver_id == caregiver_id)
         
     elif type == "carerecipient":
-        pass
+        base_conditions.append(Routine.care_recipient_id == carerecipient_id)
         
     else:
         raise HTTPException(
