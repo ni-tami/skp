@@ -56,3 +56,10 @@ export function deleteConnectionMutationOpt() {
     },
   })
 }
+
+export function getConnectionQueryOpt() {
+  return queryOptions<ConnectResponse>({
+    queryKey: ["connectApi", "getConnection"],
+    queryFn: () => ConnectApi.getConnection(),
+  })
+}

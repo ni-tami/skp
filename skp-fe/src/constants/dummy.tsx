@@ -1,202 +1,6 @@
 import { DAY_OF_WEEK, REPEAT_TYPE } from "./routine";
 
-export const DUMMY_ROUTINE = [ {
-    "id": 1001,
-    "status": "COMPLETED",
-    "completed_at": "2026-07-16T08:05:00Z",
-    "created_at": "2026-07-16T08:00:00Z",
-    "updated_at": "2026-07-16T08:05:00Z",
-    "schedule": {
-      "id": 501,
-      "start_time": "08:00",
-      "end_time": "08:30",
-      "interval": 1,
-      "repeat_type": "DAILY",
-      "day_of_week": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-      "created_at": "2026-01-15T00:00:00Z",
-      "updated_at": "2026-01-15T00:00:00Z",
-      "routine": {
-        "id": 101,
-        "title": "Take Morning Medication",
-        "detail": "Take 1 pill of Blood Pressure medicine with water after breakfast",
-        "notifications_enabled": true,
-        "is_active": true,
-        "created_at": "2026-01-15T00:00:00Z",
-        "updated_at": "2026-01-15T00:00:00Z",
-        "category": {
-          "id": 1,
-          "name": "Medication",
-          "icon": "medical",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:00:00Z"
-        },
-        "caregiver": {
-          "id": 10,
-          "name": "Sarah Jenkins",
-          "role": "CareGiver",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:00:00Z"
-        },
-        "carerecipient": {
-          "id": 20,
-          "name": "Robert Jenkins",
-          "role": "CareRecipient",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:00:00Z",
-          "home_location_id": 301,
-          "home_location": {
-            "user_id": 20,
-            "id": 301,
-            "lat": -6.175392,
-            "long": 106.827153,
-            "display_name": "Central Jakarta, Indonesia",
-            "created_at": "2026-01-01T00:00:00Z"
-          },
-          "last_location_id": 302,
-          "last_location": {
-            "user_id": 20,
-            "id": 302,
-            "lat": -6.175100,
-            "long": 106.827000,
-            "display_name": "Living Room",
-            "created_at": "2026-07-16T08:00:00Z"
-          },
-          "radius": 500
-        }
-      }
-    }
-  },{
-    "id": 1002,
-    "status": "PENDING",
-    "completed_at": "2026-07-16T08:05:00Z",
-    "created_at": "2026-07-16T08:00:00Z",
-    "updated_at": "2026-07-16T08:05:00Z",
-    "schedule": {
-      "id": 501,
-      "start_time": "08:00",
-      "end_time": "08:30",
-      "interval": 1,
-      "repeat_type": "DAILY",
-      "day_of_week": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-      "created_at": "2026-01-15T00:00:00Z",
-      "updated_at": "2026-01-15T00:00:00Z",
-      "routine": {
-        "id": 101,
-        "title": "Take Morning Medication",
-        "detail": "Take 1 pill of Blood Pressure medicine with water after breakfast",
-        "notifications_enabled": true,
-        "is_active": true,
-        "created_at": "2026-01-15T00:00:00Z",
-        "updated_at": "2026-01-15T00:00:00Z",
-        "category": {
-          "id": 1,
-          "name": "Medication",
-          "icon": "medical",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:00:00Z"
-        },
-        "caregiver": {
-          "id": 10,
-          "name": "Sarah Jenkins",
-          "role": "CareGiver",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:00:00Z"
-        },
-        "carerecipient": {
-          "id": 20,
-          "name": "Robert Jenkins",
-          "role": "CareRecipient",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:00:00Z",
-          "home_location_id": 301,
-          "home_location": {
-            "user_id": 20,
-            "id": 301,
-            "lat": -6.175392,
-            "long": 106.827153,
-            "display_name": "Central Jakarta, Indonesia",
-            "created_at": "2026-01-01T00:00:00Z"
-          },
-          "last_location_id": 302,
-          "last_location": {
-            "user_id": 20,
-            "id": 302,
-            "lat": -6.175100,
-            "long": 106.827000,
-            "display_name": "Living Room",
-            "created_at": "2026-07-16T08:00:00Z"
-          },
-          "radius": 500
-        }
-      }
-    }
-  },{
-    "id": 1003,
-    "status": "SKIPPED",
-    "completed_at": "2026-07-16T08:05:00Z",
-    "created_at": "2026-07-16T08:00:00Z",
-    "updated_at": "2026-07-16T08:05:00Z",
-    "schedule": {
-      "id": 501,
-      "start_time": "09:00",
-      "end_time": "08:30",
-      "interval": 1,
-      "repeat_type": "DAILY",
-      "day_of_week": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-      "created_at": "2026-01-15T00:00:00Z",
-      "updated_at": "2026-01-15T00:00:00Z",
-      "routine": {
-        "id": 101,
-        "title": "Take Morning Medication",
-        "detail": "Take 1 pill of Blood Pressure medicine with water after breakfast",
-        "notifications_enabled": true,
-        "is_active": true,
-        "created_at": "2026-01-15T00:00:00Z",
-        "updated_at": "2026-01-15T00:00:00Z",
-        "category": {
-          "id": 1,
-          "name": "Medication",
-          "icon": "medical",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:00:00Z"
-        },
-        "caregiver": {
-          "id": 10,
-          "name": "Sarah Jenkins",
-          "role": "CareGiver",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:00:00Z"
-        },
-        "carerecipient": {
-          "id": 20,
-          "name": "Robert Jenkins",
-          "role": "CareRecipient",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:00:00Z",
-          "home_location_id": 301,
-          "home_location": {
-            "user_id": 20,
-            "id": 301,
-            "lat": -6.175392,
-            "long": 106.827153,
-            "display_name": "Central Jakarta, Indonesia",
-            "created_at": "2026-01-01T00:00:00Z"
-          },
-          "last_location_id": 302,
-          "last_location": {
-            "user_id": 20,
-            "id": 302,
-            "lat": -6.175100,
-            "long": 106.827000,
-            "display_name": "Living Room",
-            "created_at": "2026-07-16T08:00:00Z"
-          },
-          "radius": 500
-        }
-      }
-    }
-  },
-];
+export const DUMMY_ROUTINE = [{"care_recipient_id": 8, "caregiver_id": 15, "category_id": 1, "created_at": "2026-07-17T07:46:53.390119", "deleted_at": null, "detail": "3x sehari", "id": 1, "is_active": true, "notifications_enabled": true, "title": "Minum Obat", "updated_at": "2026-07-17T07:46:53.390119"}, {"care_recipient_id": 8, "caregiver_id": 15, "category_id": 2, "created_at": "2026-07-17T07:47:35.808596", "deleted_at": null, "detail": "3x sehari", "id": 2, "is_active": true, "notifications_enabled": true, "title": "Exercise", "updated_at": "2026-07-17T07:47:35.808596"}];
 
 export const DUMMY_USER =  [
           { id: 101, name: "Eleanor Vance"},
@@ -214,41 +18,107 @@ export const DUMMY_CATEGORIES = [
         { id: 6, name: 'Vital Check', icon: 'pulse', variant: 'success' },
       ];
 
-      export const DUMMY_SCHEDULES = [
-                {
-                  id: 201,
-                  routine: {
-                    id: 10,
-                    title: "Morning Medication",
-                    detail: "Take 1 pill after breakfast",
-                    carerecipient: { id: 101, name: "Eleanor Vance" },
-                  } as any,
-                  start_time: "08:00",
-                  end_time: "09:00",
-                  interval: 30,
-                  repeat_type: REPEAT_TYPE.DAILY,
-                  day_of_week: [],
-                  created_at: "",
-                  updated_at: "",
-                },
-                {
-                  id: 202,
-                  routine: {
-                    id: 11,
-                    title: "Afternoon Walk",
-                    detail: "30 mins light walking in garden",
-                    carerecipient: { id: 102, name: "Arthur Pendelton" },
-                  } as any,
-                  start_time: "16:00",
-                  end_time: "17:00",
-                  interval: 60,
-                  repeat_type: REPEAT_TYPE.WEEKLY,
-                  day_of_week: [DAY_OF_WEEK.MONDAY, DAY_OF_WEEK.WEDNESDAY, DAY_OF_WEEK.FRIDAY],
-                  created_at: "",
-                  updated_at: "",
-                },
-              ];
-
+      export const DUMMY_SCHEDULES: RoutineSchedule[] = [
+  {
+    id: 1,
+    status: "PENDING",
+    completed_at: "",
+    created_at: "2026-07-17T08:00:00Z",
+    updated_at: "2026-07-17T08:00:00Z",
+    setting: {
+      id: 101,
+      start_time: "08:00",
+      end_time: "09:00",
+      interval: 30,
+      repeat_type: REPEAT_TYPE.DAILY,
+      day_of_week: [],
+      created_at: "2026-07-17T08:00:00Z",
+      updated_at: "2026-07-17T08:00:00Z",
+      routine: {
+        id: 10,
+        title: "Morning Medication",
+        detail: "Take 1 pill after breakfast with a full glass of water.",
+        is_active: true,
+        notifications_enabled: true,
+        carerecipient: {
+          id: 1,
+          name: "Eleanor Vance",
+          email: "eleanor@example.com",
+        },
+        category: {
+          id: 1,
+          name: "Medication",
+        },
+      },
+    },
+  },
+  {
+    id: 2,
+    status: "COMPLETED",
+    completed_at: "2026-07-17T08:15:00Z",
+    created_at: "2026-07-17T08:00:00Z",
+    updated_at: "2026-07-17T08:15:00Z",
+    setting: {
+      id: 102,
+      start_time: "08:00", // Same start_time as item 1 to test hidden time badge behavior
+      end_time: "08:30",
+      interval: 15,
+      repeat_type: REPEAT_TYPE.DAILY,
+      day_of_week: [],
+      created_at: "2026-07-17T08:00:00Z",
+      updated_at: "2026-07-17T08:00:00Z",
+      routine: {
+        id: 11,
+        title: "Blood Pressure Check",
+        detail: "Log blood pressure reading into the app.",
+        is_active: true,
+        notifications_enabled: true,
+        carerecipient: {
+          id: 1,
+          name: "Eleanor Vance",
+          email: "eleanor@example.com",
+        },
+        category: {
+          id: 2,
+          name: "Vital Check",
+        },
+      },
+    },
+  },
+  {
+    id: 3,
+    status: "PENDING",
+    completed_at: "",
+    created_at: "2026-07-17T08:00:00Z",
+    updated_at: "2026-07-17T08:00:00Z",
+    setting: {
+      id: 103,
+      start_time: "16:00", // Different start_time to test showing the time badge
+      end_time: "17:00",
+      interval: 60,
+      repeat_type: REPEAT_TYPE.WEEKLY,
+      day_of_week: [DAY_OF_WEEK.MONDAY, DAY_OF_WEEK.WEDNESDAY, DAY_OF_WEEK.FRIDAY],
+      created_at: "2026-07-17T08:00:00Z",
+      updated_at: "2026-07-17T08:00:00Z",
+      routine: {
+        id: 12,
+        title: "Afternoon Walk",
+        detail: "30 minutes of light walking in the garden.",
+        is_active: true,
+        notifications_enabled: false,
+        carerecipient: {
+          id: 2,
+          name: "Arthur Pendelton",
+          email: "arthur@example.com",
+        },
+        category: {
+          id: 3,
+          name: "Activity",
+        },
+      },
+    },
+  },
+];
 
               export const DUMMY_ROUTINES = [
   {

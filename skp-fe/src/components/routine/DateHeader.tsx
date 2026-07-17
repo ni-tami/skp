@@ -1,5 +1,5 @@
-import { USER_FONT_CAREGIVER, USER_FONT_CARERECIPIENT } from '@/constants/user';
 import { DateItem } from '@/utils/date';
+import { getUserFont } from '@/utils/user';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker, { DateTimePickerChangeEvent } from '@react-native-community/datetimepicker';
 import { useEffect, useRef, useState } from 'react';
@@ -19,7 +19,6 @@ interface DateHeaderProps {
   onSelectDate: (dateString: string) => void;
   onLoadMorePast: () => void;
   onLoadMoreFuture: () => void;
-  isCaregiver: boolean;
 }
 
 const ITEM_WIDTH = 68;
@@ -30,15 +29,19 @@ export function DateHeader({
   onSelectDate,
   onLoadMorePast,
   onLoadMoreFuture,
-  isCaregiver = false
 }: DateHeaderProps) {
-  const USER_FONT = isCaregiver ? USER_FONT_CAREGIVER : USER_FONT_CARERECIPIENT;
-
   const flatListRef = useRef<FlatList>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const isFetching = useRef(false);
 
-  const selectedIndex = dates.findIndex((d) => d.dateString === selectedDate);
+  const selectedIndex = dates ? dates.findIndex((d) => d.dateString === selectedDate) : -1;
+
+  if (!dates || dates.length === 0) {
+    return null;
+  }
+
+  const USER_FONT = getUserFont();
+
   const selectedItem = dates[selectedIndex] ?? dates[0];
 
   useEffect(() => {

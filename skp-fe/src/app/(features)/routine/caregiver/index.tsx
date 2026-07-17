@@ -33,12 +33,12 @@ export default function CaregiverDashboardScreen() {
           </Pressable>
 
           <Pressable
-            onPress={() => router.push("/routine/caregiver/schedule/manage")}
+            onPress={() => router.push("/routine/caregiver/setting/manage")}
             className="flex-1 bg-white p-3.5 rounded-2xl border border-gray-200 items-center justify-center gap-y-1.5 active:bg-gray-100 shadow-sm"
           >
             <Ionicons name="calendar" size={30} color="#059669" />
             <Text className="font-bold text-gray-900 text-base text-center">
-              New Schedule
+              New Setting
             </Text>
           </Pressable>
         </View>

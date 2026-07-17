@@ -4,5 +4,9 @@ export const API_URLS = {
   LOGIN: '/auth/login',
   GEOFENCE: '/location/geofence',
   CONNECT: '/connect',
-  CONNECT_GENERATE: '/connect/generate'
+  CONNECT_GENERATE: '/connect/generate',
+  ROUTINE_CATEGORY: '/routine/category',
+  ROUTINE: '/routine',
+  ROUTINE_SETTING: '/routine/setting',
+  ROUTINE_SCHEDULE: '/routine/schedule'
 };

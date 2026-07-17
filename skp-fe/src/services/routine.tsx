@@ -4,8 +4,6 @@ import { User } from "./user";
 export interface RoutineCategory {
   id: number;
   name: string;
-  icon: string;
-  variant: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -23,7 +21,7 @@ export interface Routine {
   updated_at?: string;
 }
 
-export interface RoutineSchedule {
+export interface RoutineSetting {
   id: number;
   routine: Routine;
   start_time: string;
@@ -35,9 +33,9 @@ export interface RoutineSchedule {
   updated_at: string;
 }
 
-export interface RoutineCompletion {
+export interface RoutineSchedule {
   id: number;
-  schedule: RoutineSchedule;
+  setting: RoutineSetting;
   status: string;
   completed_at: string;
   created_at: string;

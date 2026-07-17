@@ -14,6 +14,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Modal,
   Platform,
   Pressable,
@@ -108,6 +109,7 @@ export default function AddOrEditScheduleScreen() {
       (day) => selectedDays[day]
     );
 
+        Alert.alert("Success", "Successfully saved routine.");
     router.back();
   };
 
@@ -129,7 +131,7 @@ export default function AddOrEditScheduleScreen() {
           <Ionicons name="arrow-back" size={22} color="white" />
         </Pressable>
         <Text className="text-xl font-bold text-white">
-          {isEditing ? "Update Schedule" : "Schedule Routine"}
+          {isEditing ? "Update Setting" : "Create Setting"}
         </Text>
         <View className="w-10" />
       </View>
@@ -360,7 +362,7 @@ export default function AddOrEditScheduleScreen() {
           }`}
         >
           <Text className="text-white font-bold text-base">
-            {isEditing ? "Update Schedule" : "Schedule"}
+            {isEditing ? "Update Setting" : "Create Setting"}
           </Text>
         </Pressable>
       </View>

@@ -4,39 +4,22 @@ import { FloatingButton } from "@/components/shared/FloatingButton";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { DUMMY_SCHEDULES } from "@/constants/dummy";
 import { REPEAT_TYPE } from "@/constants/routine";
-import { RoutineSchedule } from "@/services/routine";
-import { Ionicons } from "@expo/vector-icons";
+import { getRoutineSettingsQueryOpt } from "@/services/queryOptions/routineQueryOpt";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ActivityIndicator, Alert, FlatList, Text, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ScheduleListScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [schedules, setSchedules] = useState<RoutineSchedule[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  useEffect(() => {
-    const fetchSchedules = async () => {
-      try {
-        setIsLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 400));
-
-        const mockSchedules: RoutineSchedule[] = DUMMY_SCHEDULES;
-
-        setSchedules(mockSchedules);
-      } catch (err) {
-        console.error("Error fetching schedules:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchSchedules();
-  }, []);
+  const { data: schedules, isLoading: isLoading } = useQuery({
+      ...getRoutineSettingsQueryOpt(),
+      select: (data) => data,
+    });
 
   const handleDeleteSchedule = (id: number, title?: string) => {
     Alert.alert(
@@ -55,7 +38,7 @@ export default function ScheduleListScreen() {
     );
   };
 
-  const filteredSchedules = schedules.filter((item) => {
+  const filteredSchedules = DUMMY_SCHEDULES?.filter((item) => {
     const query = searchQuery.toLowerCase();
     const matchTitle = item.routine?.title?.toLowerCase().includes(query) ?? false;
     const matchRecipient = item.routine?.carerecipient?.name?.toLowerCase().includes(query) ?? false;
@@ -65,15 +48,15 @@ export default function ScheduleListScreen() {
   return (
     <SafeAreaView edges={["bottom"]} className="flex-1 bg-blue-600">
       <View className="pt-12 pb-5 px-5 shadow-sm">
-        <Text className="text-2xl font-bold text-white">Scheduled Routines</Text>
+        <Text className="text-2xl font-bold text-white">Routine Settings</Text>
         <Text className="text-sm text-blue-100 mt-0.5 mb-4">
-          Schedule recurring reminders
+          Set schedule for recurring reminders
         </Text>
 
         <SearchBar
           value={searchQuery}
           onChangeText={setSearchQuery}
-          placeholder="Search schedules or recipient..."
+          placeholder="Search routine or recipient..."
         />
       </View>
 
@@ -89,10 +72,8 @@ export default function ScheduleListScreen() {
             contentContainerStyle={{ padding: 20, paddingBottom: insets.bottom + 80 }}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
-              <View className="py-16 items-center">
-                <Ionicons name="calendar-outline" size={52} color="#9CA3AF" />
-                <Text className="text-gray-400 font-bold text-lg mt-3">No active schedules</Text>
-                <Text className="text-gray-400 text-sm mt-1">Tap + below to schedule a routine</Text>
+              <View className="flex-1 items-center">
+                <Text className="text-gray-400 font-bold text-lg mt-3">No active settings</Text>
               </View>
             }
             renderItem={({ item }) => (
@@ -141,7 +122,7 @@ export default function ScheduleListScreen() {
                     <ActionButtons
                       onEdit={() =>
                         router.push({
-                          pathname: "/routine/caregiver/schedule/manage",
+                          pathname: "/routine/caregiver/setting/manage",
                           params: { scheduleId: item.id },
                         })
                       }
@@ -155,7 +136,7 @@ export default function ScheduleListScreen() {
         )}
       </View>
       <FloatingButton
-        onPress={() => router.push("/routine/caregiver/schedule/manage")}
+        onPress={() => router.push("/routine/caregiver/setting/manage")}
       />
     </SafeAreaView>
   );
