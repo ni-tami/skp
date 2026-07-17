@@ -12,10 +12,15 @@ import {
 } from '@rnmapbox/maps';
 import { useEffect, useMemo, useRef } from 'react';
 import circle from '@turf/circle';
+import distance from '@turf/distance';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocationStore } from '@/stores/location-store';
 import { Link } from 'expo-router';
 import { requestGeofencePermissions, ensureNotificationPermission } from '@/lib/permission';
 import { startSafeZoneGeofencing, stopSafeZoneGeofencing } from '@/lib/geofence-task';
+import { useAuthStore } from '@/stores/auth-store';
+
+const RECIPIENT_NAME_PLACEHOLDER = 'Recipient';
 
 async function ensureMonitoringPermissions(): Promise<boolean> {
   const permissions = await requestGeofencePermissions();
@@ -48,6 +53,12 @@ export default function MapScreen() {
   const radius = useLocationStore((state) => state.radius);
   const monitoring = useLocationStore((state) => state.monitoring);
   const setMonitoring = useLocationStore((state) => state.setMonitoring);
+
+  const role = useAuthStore((state) => state.user?.role);
+  const safeZoneSubject =
+    role === 'caregiver' ? RECIPIENT_NAME_PLACEHOLDER : 'You';
+  const safeZoneVerb = role === 'caregiver' ? 'is' : 'are';
+  const safeZonePossessive = role === 'caregiver' ? 'their' : 'your';
 
   const handleToggleMonitoring = async (value: boolean) => {
     if (!value) {
@@ -82,6 +93,16 @@ export default function MapScreen() {
     });
   }, [target, radius]);
 
+  const isOutsideSafeZone = useMemo(() => {
+    if (!target || !currentPosition) return false;
+    const distanceFromTarget = distance(
+      [currentPosition.longitude, currentPosition.latitude],
+      [target.longitude, target.latitude],
+      { units: 'meters' },
+    );
+    return distanceFromTarget > radius;
+  }, [target, currentPosition, radius]);
+
   const goToCurrentLocation = () => {
     if (!currentPosition) return;
     cameraRef.current?.setCamera({
@@ -92,11 +113,18 @@ export default function MapScreen() {
   };
 
   return (
-    <View className='flex-1 bg-cloud p-6'>
-      <View className='flex flex-col gap-2 w-full h-[50rem]'>
-        <StyledText size={24} type={'title'} className='my-4'>
-          Track Your Location
-        </StyledText>
+    <View className='flex-1 bg-cloud'>
+      <SafeAreaView edges={['top']} className='bg-brand rounded-b-[2.8rem] px-6 pb-10 pt-4 h-52'>
+        <View className='absolute bottom-8 px-8'>
+          <StyledText size={24} type={'title'} className='text-white'>
+            Track Your Location
+          </StyledText>
+          <StyledText size={14} className='text-white/80 mt-1'>
+            Stay updated on {safeZonePossessive} safe zone status
+          </StyledText>
+        </View>
+      </SafeAreaView>
+      <View className='flex flex-col gap-2 w-full h-[50rem] p-6 mt-4'>
         <StyledText size={18} type={'title'}>
           Safe Zone
         </StyledText>
@@ -150,9 +178,18 @@ export default function MapScreen() {
           </View>
           <Link href='/map/viewer'>
             <View className='flex flex-row items-center justify-between rounded-b-xl bg-white w-full px-4 py-6'>
-              <StyledText size={16} className='font-semibold'>
-                You are still in the safe zone
-              </StyledText>
+              <View className='flex flex-row items-center gap-2'>
+                {isOutsideSafeZone && (
+                  <View className='w-[24px] h-[24px] items-center justify-center rounded-full bg-danger-tint'>
+                    <Ionicons name='warning' size={14} color='#D62828' />
+                  </View>
+                )}
+                <StyledText size={16} className='font-semibold'>
+                  {isOutsideSafeZone
+                    ? `${safeZoneSubject} ${safeZoneVerb} outside the safe zone`
+                    : `${safeZoneSubject} ${safeZoneVerb} still in the safe zone`}
+                </StyledText>
+              </View>
               <Ionicons
                 name={'chevron-forward-outline'}
                 size={20}
@@ -161,29 +198,37 @@ export default function MapScreen() {
             </View>
           </Link>
         </View>
-        <Link href='/map/picker'>
-          <View className='flex justify-between flex-row items-center rounded-xl bg-white w-full p-4'>
-            <View className={'flex flex-row gap-2 items-center'}>
-              <View className='w-[30px] h-[30px] items-center justify-center rounded-full bg-success-tint'>
-                <Ionicons name={'location-sharp'} size={20} color='#3E7A4C' />
+        {role === 'caregiver' && (
+          <Link href='/map/picker'>
+            <View className='flex justify-between flex-row items-center rounded-xl bg-white w-full p-4'>
+              <View className={'flex flex-row gap-2 items-center'}>
+                <View className='w-[30px] h-[30px] items-center justify-center rounded-full bg-brand-tint'>
+                  <Ionicons name={'location-sharp'} size={20} color='#007FFF' />
+                </View>
+                <StyledText size={16} className='font-semibold'>
+                  Set safe zone
+                </StyledText>
               </View>
-              <StyledText size={16} className='font-semibold'>
-                Set your safe zone
-              </StyledText>
+              <Ionicons
+                name={'chevron-forward-outline'}
+                size={20}
+                color='#1E2430'
+              />
             </View>
-            <Ionicons
-              name={'chevron-forward-outline'}
-              size={20}
-              color='#1E2430'
-            />
-          </View>
-        </Link>
+          </Link>
+        )}
         {target && radius && (
           <View className='flex flex-row items-center justify-end mt-2'>
             <StyledText size={16} className='font-semibold'>
               Notify me within {radius}m
             </StyledText>
-            <Switch value={monitoring} onValueChange={handleToggleMonitoring} className='bg-' />
+            <Switch
+              value={monitoring}
+              onValueChange={handleToggleMonitoring}
+              trackColor={{ false: '#DCE1E8', true: '#007FFF' }}
+              thumbColor='#FFFFFF'
+              ios_backgroundColor='#DCE1E8'
+            />
           </View>
         )}
       </View>
