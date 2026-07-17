@@ -27,4 +27,3 @@ class User(Base):
     last_accuracy = Column(Float, nullable=True)
     last_seen_at = Column(DateTime, nullable=True)
     geofence_state = Column(String, nullable=True)  # 'inside' | 'outside' | NULL
-    created_at = Column(DateTime, default=datetime.utcnow)

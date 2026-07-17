@@ -28,10 +28,15 @@ from app.schemas.routine import (
     RoutineSchedulesByStatusResponse,
     UserMinimal,
 )
+from app.schemas.people import PeopleOut
 
 __all__ = [
+    # Connection
     "ConnectOut",
     "GenerateCodeOut",
+    "PeopleOut",
+
+    # Geofencing
     "GeofenceIn",
     "GeofenceOut",
     "PointAck",

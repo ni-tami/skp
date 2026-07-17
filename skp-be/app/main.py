@@ -4,7 +4,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from app.config import CORS_ORIGINS
-from app.routers import auth, location, connect, routine
+from app.routers import auth
+from app.routers import location
+from app.routers import connect
+from app.routers import routine
+from app.routers import people
 
 # 1. Import your session generator and schedule builder
 from app.db import AsyncSessionLocal  # Adjust this import to match your DB session setup
@@ -85,6 +89,7 @@ app.include_router(auth.router)
 app.include_router(location.router)
 app.include_router(connect.router)
 app.include_router(routine.router)
+app.include_router(people.router)
 
 @app.get("/")
 def root():
