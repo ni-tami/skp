@@ -36,7 +36,7 @@ from app.utility.schedule_generator import generate_schedules
 from typing_extensions import Literal
 
 # Placeholder dependency for your database session
-from app.db.connection import get_db
+from app.deps import get_db, get_current_user, require_role
 
 router = APIRouter(prefix="/routine", tags=["Routine"])
 
@@ -45,7 +45,7 @@ router = APIRouter(prefix="/routine", tags=["Routine"])
 # =====================================================================
 
 @router.post("/", response_model=RoutineSchema, status_code=status.HTTP_201_CREATED)
-async def create_routine(payload: RoutineCreate, db: AsyncSession = Depends(get_db)):
+async def create_routine(payload: RoutineCreate, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     now = datetime.utcnow()
     db_routine = Routine(
         **payload.model_dump(),
@@ -59,7 +59,7 @@ async def create_routine(payload: RoutineCreate, db: AsyncSession = Depends(get_
 
 
 @router.get("/", response_model=List[RoutineSchema])
-async def read_routines(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)):
+async def read_routines(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(Routine)
         .where(Routine.deleted_at.is_(None))
@@ -70,7 +70,7 @@ async def read_routines(skip: int = 0, limit: int = 100, db: AsyncSession = Depe
 
 
 @router.get("/{routine_id:int}", response_model=RoutineSchema)
-async def read_routine(routine_id: int, db: AsyncSession = Depends(get_db)):
+async def read_routine(routine_id: int, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(Routine).where(and_(Routine.id == routine_id, Routine.deleted_at.is_(None)))
     )
@@ -81,7 +81,7 @@ async def read_routine(routine_id: int, db: AsyncSession = Depends(get_db)):
 
 
 @router.put("/{routine_id}", response_model=RoutineSchema)
-async def update_routine(routine_id: int, payload: RoutineUpdate, db: AsyncSession = Depends(get_db)):
+async def update_routine(routine_id: int, payload: RoutineUpdate, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(Routine).where(and_(Routine.id == routine_id, Routine.deleted_at.is_(None)))
     )
@@ -100,7 +100,7 @@ async def update_routine(routine_id: int, payload: RoutineUpdate, db: AsyncSessi
 
 
 @router.delete("/{routine_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_routine(routine_id: int, db: AsyncSession = Depends(get_db)):
+async def delete_routine(routine_id: int, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(Routine).where(and_(Routine.id == routine_id, Routine.deleted_at.is_(None)))
     )
@@ -118,7 +118,7 @@ async def delete_routine(routine_id: int, db: AsyncSession = Depends(get_db)):
 # =====================================================================
 
 @router.post("/category", response_model=RoutineCategorySchema, status_code=status.HTTP_201_CREATED)
-async def create_routine_category(payload: RoutineCategoryCreate, db: AsyncSession = Depends(get_db)):
+async def create_routine_category(payload: RoutineCategoryCreate, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     now = datetime.utcnow()
     db_category = RoutineCategory(
         **payload.model_dump(),
@@ -132,7 +132,7 @@ async def create_routine_category(payload: RoutineCategoryCreate, db: AsyncSessi
 
 
 @router.get("/category", response_model=List[RoutineCategorySchema])
-async def read_routine_categories(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)):
+async def read_routine_categories(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(RoutineCategory)
         .where(RoutineCategory.deleted_at.is_(None))
@@ -143,7 +143,7 @@ async def read_routine_categories(skip: int = 0, limit: int = 100, db: AsyncSess
 
 
 @router.get("/category/{category_id}", response_model=RoutineCategorySchema)
-async def read_routine_category(category_id: int, db: AsyncSession = Depends(get_db)):
+async def read_routine_category(category_id: int, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(RoutineCategory).where(and_(RoutineCategory.id == category_id, RoutineCategory.deleted_at.is_(None)))
     )
@@ -154,7 +154,7 @@ async def read_routine_category(category_id: int, db: AsyncSession = Depends(get
 
 
 @router.put("/category/{category_id}", response_model=RoutineCategorySchema)
-async def update_routine_category(category_id: int, payload: RoutineCategoryUpdate, db: AsyncSession = Depends(get_db)):
+async def update_routine_category(category_id: int, payload: RoutineCategoryUpdate, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(RoutineCategory).where(and_(RoutineCategory.id == category_id, RoutineCategory.deleted_at.is_(None)))
     )
@@ -173,7 +173,7 @@ async def update_routine_category(category_id: int, payload: RoutineCategoryUpda
 
 
 @router.delete("/category/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_routine_category(category_id: int, db: AsyncSession = Depends(get_db)):
+async def delete_routine_category(category_id: int, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(RoutineCategory).where(and_(RoutineCategory.id == category_id, RoutineCategory.deleted_at.is_(None)))
     )
@@ -190,7 +190,7 @@ async def delete_routine_category(category_id: int, db: AsyncSession = Depends(g
 # =====================================================================
 
 # @router.post("/setting", response_model=RoutineSettingSchema, status_code=status.HTTP_201_CREATED)
-# async def create_routine_setting(payload: RoutineSettingCreate, db: AsyncSession = Depends(get_db)):
+# async def create_routine_setting(payload: RoutineSettingCreate, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
 #     # Optional Validation: Check if the target parent routine actually exists
 #     routine_check = await db.execute(
 #         select(Routine).where(and_(Routine.id == payload.routine_id, Routine.deleted_at.is_(None)))
@@ -211,7 +211,7 @@ async def delete_routine_category(category_id: int, db: AsyncSession = Depends(g
 
 
 @router.get("/setting", response_model=List[RoutineSettingSchema])
-async def read_routine_settings(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)):
+async def read_routine_settings(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(RoutineSetting)
         .where(RoutineSetting.deleted_at.is_(None))
@@ -222,7 +222,7 @@ async def read_routine_settings(skip: int = 0, limit: int = 100, db: AsyncSessio
 
 
 @router.get("/setting/{setting_id}", response_model=RoutineSettingSchema)
-async def read_routine_setting(setting_id: int, db: AsyncSession = Depends(get_db)):
+async def read_routine_setting(setting_id: int, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(RoutineSetting).where(and_(RoutineSetting.id == setting_id, RoutineSetting.deleted_at.is_(None)))
     )
@@ -233,7 +233,7 @@ async def read_routine_setting(setting_id: int, db: AsyncSession = Depends(get_d
 
 
 @router.put("/setting/{setting_id}", response_model=RoutineSettingSchema)
-async def update_routine_setting(setting_id: int, payload: RoutineSettingUpdate, db: AsyncSession = Depends(get_db)):
+async def update_routine_setting(setting_id: int, payload: RoutineSettingUpdate, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(RoutineSetting).where(and_(RoutineSetting.id == setting_id, RoutineSetting.deleted_at.is_(None)))
     )
@@ -252,7 +252,7 @@ async def update_routine_setting(setting_id: int, payload: RoutineSettingUpdate,
 
 
 @router.delete("/setting/{setting_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_routine_setting(setting_id: int, db: AsyncSession = Depends(get_db)):
+async def delete_routine_setting(setting_id: int, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(RoutineSetting).where(and_(RoutineSetting.id == setting_id, RoutineSetting.deleted_at.is_(None)))
     )
@@ -265,7 +265,7 @@ async def delete_routine_setting(setting_id: int, db: AsyncSession = Depends(get
     return None
 
 @router.get("/setting/{caregiver_id}", response_model=RoutineSettingsResponse)
-async def get_routine_settings_by_caregiver(caregiver_id: int, db: AsyncSession = Depends(get_db)):
+async def get_routine_settings_by_caregiver(caregiver_id: int, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     # 1. Fetch Caregiver data
     caregiver_result = await db.execute(select(User).where(User.id == caregiver_id))
     caregiver_user = caregiver_result.scalar_one_or_none()
@@ -330,7 +330,7 @@ async def get_routine_settings_by_caregiver(caregiver_id: int, db: AsyncSession 
 )
 async def create_routine_setting(
     payload: RoutineSettingCreate, 
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db), User = Depends(get_current_user)
 ):
     # 1. Verify that the referenced routine exists
     routine_check = await db.execute(
@@ -386,7 +386,7 @@ async def create_routine_setting(
 # =====================================================================
 
 @router.post("/schedule", response_model=RoutineScheduleSchema, status_code=status.HTTP_201_CREATED)
-async def create_routine_schedule(payload: RoutineScheduleCreate, db: AsyncSession = Depends(get_db)):
+async def create_routine_schedule(payload: RoutineScheduleCreate, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     # Normalize uppercase status logic as observed in your original endpoints
     data = payload.model_dump()
     if "status" in data and data["status"]:
@@ -405,7 +405,7 @@ async def create_routine_schedule(payload: RoutineScheduleCreate, db: AsyncSessi
 
 
 @router.get("/schedule", response_model=List[RoutineScheduleSchema])
-async def read_routine_schedules(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)):
+async def read_routine_schedules(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(RoutineSchedule)
         .where(RoutineSchedule.deleted_at.is_(None))
@@ -416,7 +416,7 @@ async def read_routine_schedules(skip: int = 0, limit: int = 100, db: AsyncSessi
 
 
 @router.get("/schedule/{schedule_id}", response_model=RoutineScheduleSchema)
-async def read_routine_schedule(schedule_id: int, db: AsyncSession = Depends(get_db)):
+async def read_routine_schedule(schedule_id: int, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(RoutineSchedule).where(and_(RoutineSchedule.id == schedule_id, RoutineSchedule.deleted_at.is_(None)))
     )
@@ -427,7 +427,7 @@ async def read_routine_schedule(schedule_id: int, db: AsyncSession = Depends(get
 
 
 @router.put("/schedule/{schedule_id}", response_model=RoutineScheduleSchema)
-async def update_routine_schedule(schedule_id: int, payload: RoutineScheduleUpdate, db: AsyncSession = Depends(get_db)):
+async def update_routine_schedule(schedule_id: int, payload: RoutineScheduleUpdate, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(RoutineSchedule).where(and_(RoutineSchedule.id == schedule_id, RoutineSchedule.deleted_at.is_(None)))
     )
@@ -453,7 +453,7 @@ async def update_routine_schedule(schedule_id: int, payload: RoutineScheduleUpda
 
 
 @router.delete("/schedule/{schedule_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_routine_schedule(schedule_id: int, db: AsyncSession = Depends(get_db)):
+async def delete_routine_schedule(schedule_id: int, db: AsyncSession = Depends(get_db), User = Depends(get_current_user)):
     result = await db.execute(
         select(RoutineSchedule).where(and_(RoutineSchedule.id == schedule_id, RoutineSchedule.deleted_at.is_(None)))
     )
@@ -471,7 +471,7 @@ async def get_routine_schedules_by_date(
     caregiver_id: int, 
     carerecipient_id: int, 
     routineschedule_date: date_type, 
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db), User = Depends(get_current_user)
 ):
     base_conditions = [
         Routine.care_recipient_id == carerecipient_id,
@@ -541,7 +541,7 @@ async def get_routine_schedules_by_status(
     caregiver_id: int, 
     carerecipient_id: int, 
     routineschedule_status: str, 
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db), User = Depends(get_current_user)
 ):
     # Base configuration mapping the status explicitly
     stmt = (
