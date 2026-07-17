@@ -92,7 +92,7 @@ export default function MapScreen() {
   };
 
   return (
-    <View className='flex-1 bg-[#F6F6F6] p-6'>
+    <View className='flex-1 bg-cloud p-6'>
       <View className='flex flex-col gap-2 w-full h-[50rem]'>
         <StyledText size={24} type={'title'} className='my-4'>
           Track Your Location
@@ -132,11 +132,11 @@ export default function MapScreen() {
                 <ShapeSource id='safeZoneSource' shape={safeZoneCircle}>
                   <FillLayer
                     id='safeZoneFill'
-                    style={{ fillColor: '#208AEF', fillOpacity: 0.2 }}
+                    style={{ fillColor: '#007FFF', fillOpacity: 0.2 }}
                   />
                   <LineLayer
                     id='safeZoneOutline'
-                    style={{ lineColor: '#208AEF', lineWidth: 2 }}
+                    style={{ lineColor: '#007FFF', lineWidth: 2 }}
                   />
                 </ShapeSource>
               )}
@@ -145,7 +145,7 @@ export default function MapScreen() {
               onPress={goToCurrentLocation}
               className='absolute bottom-4 right-4 items-center justify-center rounded-full bg-white w-11 h-11 shadow'
             >
-              <Ionicons name='locate' size={22} color='#208AEF' />
+              <Ionicons name='locate' size={22} color='#007FFF' />
             </Pressable>
           </View>
           <Link href='/map/viewer'>
@@ -156,7 +156,7 @@ export default function MapScreen() {
               <Ionicons
                 name={'chevron-forward-outline'}
                 size={20}
-                color='#242424'
+                color='#1E2430'
               />
             </View>
           </Link>
@@ -164,8 +164,8 @@ export default function MapScreen() {
         <Link href='/map/picker'>
           <View className='flex justify-between flex-row items-center rounded-xl bg-white w-full p-4'>
             <View className={'flex flex-row gap-2 items-center'}>
-              <View className='w-[30px] h-[30px] items-center justify-center rounded-full bg-[#F2F7EB]'>
-                <Ionicons name={'location-sharp'} size={20} color='#71975D' />
+              <View className='w-[30px] h-[30px] items-center justify-center rounded-full bg-success-tint'>
+                <Ionicons name={'location-sharp'} size={20} color='#3E7A4C' />
               </View>
               <StyledText size={16} className='font-semibold'>
                 Set your safe zone
@@ -174,16 +174,16 @@ export default function MapScreen() {
             <Ionicons
               name={'chevron-forward-outline'}
               size={20}
-              color='#242424'
+              color='#1E2430'
             />
           </View>
         </Link>
         {target && radius && (
-          <View className='flex flex-row items-center justify-start mt-2'>
+          <View className='flex flex-row items-center justify-end mt-2'>
             <StyledText size={16} className='font-semibold'>
               Notify me within {radius}m
             </StyledText>
-            <Switch value={monitoring} onValueChange={handleToggleMonitoring} />
+            <Switch value={monitoring} onValueChange={handleToggleMonitoring} className='bg-' />
           </View>
         )}
       </View>

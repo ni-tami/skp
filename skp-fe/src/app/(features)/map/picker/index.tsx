@@ -39,7 +39,7 @@ function LocationStep({
       <StyledText size={18} type='title'>
         {pickedName}
       </StyledText>
-      <StyledText size={12} className='text-[#959697] mb-4'>
+      <StyledText size={12} className='text-slate mb-4'>
         {pickedAddress}
       </StyledText>
       <Button
@@ -78,7 +78,7 @@ function RadiusStep({
         <StyledText size={14} className='font-semibold'>
           Safe zone radius
         </StyledText>
-        <StyledText size={14} className='text-[#007FFF] font-semibold'>
+        <StyledText size={14} className='text-brand font-semibold'>
           {Math.round(radius)} m
         </StyledText>
       </View>
@@ -89,7 +89,7 @@ function RadiusStep({
         value={radius}
         onValueChange={setRadius}
         minimumTrackTintColor='#007FFF'
-        maximumTrackTintColor='#E5E5E5'
+        maximumTrackTintColor='#DCE1E8'
         thumbTintColor='#007FFF'
       />
       <Button
@@ -243,14 +243,14 @@ export default function MapPicker() {
             }}
             className='w-[35px] h-[35px] items-center justify-center rounded-full bg-white'
           >
-            <Ionicons name={'chevron-back-sharp'} size={16} color='#242424' />
+            <Ionicons name={'chevron-back-sharp'} size={16} color='#1E2430' />
           </Pressable>
           <View className='bg-white w-[80vw] p-2 rounded-full shadow-lg'>
             <Pressable
               onPress={() => {}}
-              className='items-center justify-center self-end w-10 h-10 rounded-full bg-[#F2F2F2]'
+              className='items-center justify-center self-end w-10 h-10 rounded-full bg-cloud'
             >
-              <Ionicons name={'search'} size={16} color='#242424' />
+              <Ionicons name={'search'} size={16} color='#1E2430' />
             </Pressable>
           </View>
         </View>

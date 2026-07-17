@@ -98,7 +98,7 @@ export default function MapViewer() {
           }}
           className='w-[35px] h-[35px] items-center justify-center rounded-full bg-white shadow-lg'
         >
-          <Ionicons name={'chevron-back-sharp'} size={16} color='#242424' />
+          <Ionicons name={'chevron-back-sharp'} size={16} color='#1E2430' />
         </Pressable>
       </View>
     </View>

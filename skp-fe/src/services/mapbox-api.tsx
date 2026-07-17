@@ -23,4 +23,3 @@ export const MapboxApi = {
     return data;
   },
 };
-
