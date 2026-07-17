@@ -14,8 +14,8 @@ interface Props {
 }
 
 const COLOR_MAP: Record<Props['type'] & string, string> = {
-  default: 'bg-[#007FFF]',
-  danger: 'bg-[#E92A2A]',
+  default: 'bg-brand',
+  danger: 'bg-danger',
 };
 
 export default function Button({
