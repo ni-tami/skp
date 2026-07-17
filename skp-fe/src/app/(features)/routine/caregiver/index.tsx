@@ -8,7 +8,7 @@ export default function CaregiverDashboardScreen() {
   const router = useRouter();
 
   return (
-    <SafeAreaView edges={["bottom"]} className="flex-1 bg-blue-600">
+    <SafeAreaView edges={["bottom"]} className="flex-1 bg-brand">
       <View className="pt-12 pb-5 px-5 shadow-sm">
         <Text className="text-2xl font-bold text-white">Routine Management</Text>
         <Text className="text-base text-blue-100 mt-1">

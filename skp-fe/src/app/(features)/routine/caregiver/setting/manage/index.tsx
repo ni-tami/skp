@@ -123,10 +123,10 @@ export default function AddOrEditScheduleScreen() {
 
   return (
     <SafeAreaView edges={["bottom"]} className="flex-1 bg-gray-50">
-      <View className="bg-blue-600 pt-12 pb-4 px-4 flex-row items-center justify-between shadow-sm">
+      <View className="bg-brand pt-12 pb-4 px-4 flex-row items-center justify-between shadow-sm">
         <Pressable
           onPress={() => router.back()}
-          className="w-10 h-10 bg-blue-700/60 items-center justify-center rounded-full active:bg-blue-800"
+          className="w-10 h-10 bg-brand-press/60 items-center justify-center rounded-full active:bg-brand-press"
         >
           <Ionicons name="arrow-back" size={22} color="white" />
         </Pressable>
@@ -251,8 +251,8 @@ export default function AddOrEditScheduleScreen() {
                     key={type}
                     onPress={() => setRepeatType(type)}
                     className={`w-20 items-center px-4 py-2.5 rounded-xl border ${
-                      isSelected ? "bg-blue-600 border-blue-600" : "bg-gray-50 border-gray-200"
-                    } active:bg-blue-700`}
+                      isSelected ? "bg-brand border-brand" : "bg-gray-50 border-gray-200"
+                    } active:bg-brand-press`}
                   >
                     <Text className={`text-xs font-bold ${isSelected ? "text-white" : "text-gray-600"}`}>
                       {type}
@@ -276,7 +276,7 @@ export default function AddOrEditScheduleScreen() {
                       key={day}
                       onPress={() => toggleDay(day)}
                       className={`w-9 h-9 rounded-full items-center justify-center ${
-                        isSelected ? "bg-blue-600 active:bg-blue-800" : "bg-gray-100 active:bg-gray-200"
+                        isSelected ? "bg-brand active:bg-brand-press" : "bg-gray-100 active:bg-gray-200"
                       }`}
                     >
                       <Text className={`text-xs font-bold ${isSelected ? "text-white" : "text-gray-600"}`}>
@@ -323,7 +323,7 @@ export default function AddOrEditScheduleScreen() {
                         setSearchQuery("");
                       }}
                       className={`p-4 mb-2.5 rounded-2xl border flex-row items-center justify-between ${
-                        isSelected ? "bg-blue-50 border-blue-600" : "bg-gray-50 border-gray-100"
+                        isSelected ? "bg-brand-tint border-brand" : "bg-gray-50 border-gray-100"
                       } active:bg-gray-200`}
                     >
                       <View className="flex-1 pr-2">
@@ -358,7 +358,7 @@ export default function AddOrEditScheduleScreen() {
           onPress={handleSaveSchedule}
           disabled={!selectedRoutine}
           className={`py-4 rounded-2xl items-center justify-center ${
-            selectedRoutine ? "bg-blue-600 active:bg-blue-800" : "bg-gray-300"
+            selectedRoutine ? "bg-brand active:bg-brand-press" : "bg-gray-300"
           }`}
         >
           <Text className="text-white font-bold text-base">

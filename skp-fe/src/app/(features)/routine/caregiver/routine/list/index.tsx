@@ -62,7 +62,7 @@ export default function RoutineListScreen() {
   });
 
   return (
-    <SafeAreaView edges={["bottom"]} className="flex-1 bg-blue-600">
+    <SafeAreaView edges={["bottom"]} className="flex-1 bg-brand">
       <View className="pt-12 pb-5 px-5 shadow-sm">
         <Text className="text-2xl font-bold text-white">Routines</Text>
         <Text className="text-sm text-blue-100 mt-0.5 mb-4">Manage reusable care routines</Text>

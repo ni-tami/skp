@@ -112,10 +112,10 @@ export default function AddOrEditRoutineScreen() {
 
   return (
     <SafeAreaView edges={["bottom"]} className="flex-1 bg-gray-50">
-      <View className="bg-blue-600 pt-12 pb-4 px-4 flex-row items-center justify-between shadow-sm">
+      <View className="bg-brand pt-12 pb-4 px-4 flex-row items-center justify-between shadow-sm">
         <Pressable
           onPress={() => router.back()}
-          className="w-10 h-10 bg-blue-700/60 items-center justify-center rounded-full active:bg-blue-800"
+          className="w-10 h-10 bg-brand-press/60 items-center justify-center rounded-full active:bg-brand-press"
         >
           <Ionicons name="arrow-back" size={22} color="white" />
         </Pressable>
@@ -197,7 +197,7 @@ export default function AddOrEditRoutineScreen() {
                       setShowCategoryModal(false);
                     }}
                     className={`flex-row items-center justify-between p-4 mb-2.5 rounded-2xl border ${
-                      isSelected ? "bg-blue-50/70 border-blue-600" : "bg-gray-50 border-gray-100"
+                      isSelected ? "bg-brand-tint/70 border-brand" : "bg-gray-50 border-gray-100"
                     }`}
                   >
                     <Text className={`font-bold text-base ${isSelected ? "text-blue-600" : "text-gray-900"}`}>
@@ -217,7 +217,7 @@ export default function AddOrEditRoutineScreen() {
           onPress={handleSaveRoutine}
           disabled={!title.trim() || !selectedCategory || isPending || isPendingUpdate}
           className={`py-4 rounded-2xl items-center justify-center ${
-            title.trim() && selectedCategory && !isPending ? "bg-blue-600 active:bg-blue-800" : "bg-gray-300"
+            title.trim() && selectedCategory && !isPending ? "bg-brand active:bg-brand-press" : "bg-gray-300"
           }`}
         >
           {isPending || isPendingUpdate ? (

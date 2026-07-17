@@ -93,7 +93,7 @@ export default function RoutineScreen() {
   };
 
   return (
-    <SafeAreaView edges={["top", "bottom"]} className="bg-blue-600 flex-1 pt-4">
+    <SafeAreaView edges={["top", "bottom"]} className="bg-brand flex-1 pt-4">
       <DateHeader
         dates={dates}
         selectedDate={selectedDate}

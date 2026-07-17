@@ -1,4 +1,4 @@
-import { View, Pressable } from 'react-native';
+import { View, Pressable, Alert } from 'react-native';
 import { useMemo, useRef, useState } from 'react';
 import { router, Stack } from 'expo-router';
 import {
@@ -20,6 +20,9 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import Button from '@/components/ui/Button';
 import StyledText from '@/components/ui/StyledText';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { setGeofenceMutationOpt } from '@/services/queryOptions/locationQueryOpt';
+import { connectionQueryOpt } from '@/services/queryOptions/connectQueryOpt';
 
 interface LocationStepProps {
   pickedName: string;
@@ -167,10 +170,37 @@ export default function MapPicker() {
     setStep('radius');
   };
 
+  const { data: connections } = useQuery(connectionQueryOpt());
+  const setGeofence = useMutation(setGeofenceMutationOpt());
+  const queryClient = useQueryClient();
+
   const handleConfirmSafeZone = () => {
     if (!pickedCoordinate) return;
-    setTargetLocation({ ...pickedCoordinate, name: pickedName });
-    router.back();
+
+    const recipientId = connections?.[0]?.recipient_id;
+    if (!recipientId) {
+      Alert.alert('No linked recipient', 'Link a care recipient before setting a safe zone.');
+      return;
+    }
+
+    setGeofence.mutate(
+      {
+        recipient_id: recipientId,
+        home_lat: pickedCoordinate.latitude,
+        home_lng: pickedCoordinate.longitude,
+        home_radius_in_m: Math.round(radius),
+      },
+      {
+        onSuccess: () => {
+          setTargetLocation({ ...pickedCoordinate, name: pickedName });
+          queryClient.invalidateQueries({ queryKey: ['locationApi', 'geofence'] });
+          router.back();
+        },
+        onError: (err) => {
+          Alert.alert('Could not save safe zone', err.response?.data?.message ?? 'Please try again.');
+        },
+      },
+    );
   };
 
   return (

@@ -19,6 +19,9 @@ import { Link } from 'expo-router';
 import { requestGeofencePermissions, ensureNotificationPermission } from '@/lib/permission';
 import { startSafeZoneGeofencing, stopSafeZoneGeofencing } from '@/lib/geofence-task';
 import { useAuthStore } from '@/stores/auth-store';
+import { useQuery } from '@tanstack/react-query';
+import { geofenceQueryOpt } from '@/services/queryOptions/locationQueryOpt';
+import { connectionQueryOpt } from '@/services/queryOptions/connectQueryOpt';
 
 const RECIPIENT_NAME_PLACEHOLDER = 'Recipient';
 
@@ -55,10 +58,31 @@ export default function MapScreen() {
   const setMonitoring = useLocationStore((state) => state.setMonitoring);
 
   const role = useAuthStore((state) => state.user?.role);
-  const safeZoneSubject =
-    role === 'caregiver' ? RECIPIENT_NAME_PLACEHOLDER : 'You';
+  const { data: connections } = useQuery(connectionQueryOpt());
+  const linkedRecipientName =
+    connections?.[0]?.recipient?.display_name ?? RECIPIENT_NAME_PLACEHOLDER;
+  const safeZoneSubject = role === 'caregiver' ? linkedRecipientName : 'You';
   const safeZoneVerb = role === 'caregiver' ? 'is' : 'are';
   const safeZonePossessive = role === 'caregiver' ? 'their' : 'your';
+
+  const setTargetLocation = useLocationStore((state) => state.setTargetLocation);
+  const setRadius = useLocationStore((state) => state.setRadius);
+  const { data: geofence } = useQuery(geofenceQueryOpt());
+
+  useEffect(() => {
+    if (!geofence) return;
+    const hasGeofence =
+      geofence.home_lat !== 0 &&
+      geofence.home_lng !== 0 &&
+      geofence.home_radius_in_m > 1;
+    if (!hasGeofence) return;
+    setTargetLocation({
+      latitude: geofence.home_lat,
+      longitude: geofence.home_lng,
+      name: 'Safe zone',
+    });
+    setRadius(geofence.home_radius_in_m);
+  }, [geofence]);
 
   const handleToggleMonitoring = async (value: boolean) => {
     if (!value) {

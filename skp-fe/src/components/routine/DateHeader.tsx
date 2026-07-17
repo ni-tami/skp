@@ -99,7 +99,7 @@ export function DateHeader({
   const selectedDateTime = new Date(selectedDate + 'T00:00:00');
 
   return (
-    <View className="flex-col gap-3 bg-blue-600 rounded-b-[32px]">
+    <View className="flex-col gap-3 bg-brand rounded-b-[32px]">
       <View className="px-6 flex-row items-center justify-between">
         <Text className={`${USER_FONT.SUPER_LARGE} font-bold text-white`}>
           {selectedItem?.fullFormattedDate}
@@ -107,7 +107,7 @@ export function DateHeader({
 
         <Pressable
           onPress={() => setShowDatePicker(true)}
-          className="bg-blue-800/60 p-2.5 rounded-2xl active:bg-blue-800"
+          className="bg-brand-press p-2.5 rounded-2xl active:bg-brand"
         >
           <Ionicons name="calendar-outline" size={22} color="white" />
         </Pressable>
@@ -146,10 +146,10 @@ export function DateHeader({
           return (
             <Pressable
               onPress={() => handleDatePress(item.dateString)}
-              className={`items-center justify-center w-[58px] h-[82px] rounded-full ${isSelected ? 'bg-lime-100' : 'bg-white'}`}
+              className={`items-center justify-center w-[58px] h-[82px] rounded-full ${isSelected ? 'bg-brand-tint' : 'bg-white'}`}
             >
-              <Text className={`${USER_FONT.SUPER_LARGE} font-bold text-green-900`}>{item.dayNumber}</Text>
-              <Text className={`${USER_FONT.LARGE} font-bold ${isSelected ? 'text-green-900' : 'text-gray-500'}`}>{item.dayName}</Text>
+              <Text className={`${USER_FONT.SUPER_LARGE} font-bold ${isSelected ? 'text-brand-press' : 'text-ink'}`}>{item.dayNumber}</Text>
+              <Text className={`${USER_FONT.LARGE} font-bold ${isSelected ? 'text-brand-press' : 'text-slate'}`}>{item.dayName}</Text>
             </Pressable>
           );
         }}
