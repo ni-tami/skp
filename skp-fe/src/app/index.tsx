@@ -6,7 +6,7 @@ export default function HomeScreen() {
     <View className="flex-1 bg-white p-4 pt-5">
       <View className="flex-row gap-4">
         <HomeButton title="Routine" icon="alarm-outline" route="/routine" />
-        <HomeButton title="Maps" icon="location-sharp" route="/maps" />
+        <HomeButton title="Maps" icon="location-sharp" route="/map" />
       </View>
 
       <View className="mt-4 flex-row gap-4">
