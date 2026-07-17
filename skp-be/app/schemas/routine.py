@@ -57,6 +57,42 @@ class RoutineSetting(BaseModel):
     class Config:
         from_attributes = True
 
+class RoutineSettingResponse(BaseModel):
+    id: int
+    start_time: time
+    end_time: time
+    interval: int
+    repeat_type: str
+    day_of_week: Optional[List[int]] = None
+
+    class Config:
+        from_attributes = True
+
+# Update ScheduleDetail to include the setting field
+class RoutineSettingWithCategory(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    name: str
+    color: str
+    
+class RoutineForSchedule(BaseModel):
+    id: int
+    title: str
+    detail: Optional[str]
+    category: RoutineSettingWithCategory
+
+    class Config:
+        from_attributes = True
+
+
+class ScheduleDetail(BaseModel):
+    id: int
+    status: str
+    confirmed_at: Optional[datetime]
+    start_time: datetime
+    end_time: datetime
+    routine: RoutineForSchedule
+    setting: Optional[RoutineSettingResponse] = None  # <-- Added this field
 
 # ---------- User Minimal ----------
 class UserMinimal(BaseModel):
@@ -163,16 +199,6 @@ class RoutineSettingsResponse(BaseModel):
         from_attributes = True
 
 
-class RoutineForSchedule(BaseModel):
-    id: int
-    title: str
-    detail: Optional[str]
-    category: RoutineSettingWithCategory
-
-    class Config:
-        from_attributes = True
-
-
 class ScheduleDetail(BaseModel):
     id: int
     status: str
@@ -213,12 +239,6 @@ class RoutineSchedulesByStatusResponse(BaseModel):
 
     class Config:
         from_attributes = True
-
-class RoutineSettingWithCategory(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    id: int
-    name: str
-    color: str
 
 
 class RoutineForSchedule(BaseModel):

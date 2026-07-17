@@ -27,6 +27,7 @@ from app.schemas.routine import (
     ScheduleMinimal,
     RoutineSchedulesByStatusResponse,
     UserMinimal,
+    RoutineSettingResponse
 )
 from app.schemas.people import PeopleOut
 
@@ -72,4 +73,5 @@ __all__ = [
     "RoutineSchedulesByDateResponse",
     "ScheduleMinimal",
     "RoutineSchedulesByStatusResponse",
+    "RoutineSettingResponse"
 ]

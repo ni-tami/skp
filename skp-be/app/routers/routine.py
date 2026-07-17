@@ -29,8 +29,8 @@ from app.schemas import (
     RoutineSetting as RoutineSettingSchema,
     RoutineScheduleCreate,
     RoutineScheduleUpdate,
-    RoutineSchedule as RoutineScheduleSchema
-
+    RoutineSchedule as RoutineScheduleSchema,
+    RoutineSettingResponse
 )
 from app.utility.schedule_generator import generate_schedules 
 from typing_extensions import Literal
@@ -471,7 +471,8 @@ async def get_routine_schedules_by_date(
     caregiver_id: int, 
     carerecipient_id: int, 
     routineschedule_date: date_type, 
-    db: AsyncSession = Depends(get_db), User = Depends(get_current_user)
+    db: AsyncSession = Depends(get_db), 
+    current_user: User = Depends(get_current_user)  # FIX: Corrected variable format
 ):
     base_conditions = [
         func.date(RoutineSchedule.start_time) == routineschedule_date,
@@ -494,7 +495,8 @@ async def get_routine_schedules_by_date(
         select(RoutineSchedule)
         .join(RoutineSchedule.routine)
         .options(
-            joinedload(RoutineSchedule.routine).joinedload(Routine.category)
+            joinedload(RoutineSchedule.routine).joinedload(Routine.category),
+            joinedload(RoutineSchedule.setting)  # FIX: CRITICAL! Added eager loading for setting
         )
         .where(and_(*base_conditions))
     )
@@ -504,6 +506,26 @@ async def get_routine_schedules_by_date(
 
     schedule_details = []
     for s in schedules:
+        # Build the category schema fields explicitly to dodge lazy-load evaluations
+        category_data = None
+        if s.routine and s.routine.category:
+            category_data = RoutineSettingWithCategory(
+                id=s.routine.category.id,
+                name=s.routine.category.name
+            )
+
+        # FIX: Explicitly map the setting fields safely with an existence check
+        setting_data = None
+        if s.setting:
+            setting_data = RoutineSettingResponse(
+                id=s.setting.id,
+                start_time=s.setting.start_time,
+                end_time=s.setting.end_time,
+                interval=s.setting.interval,
+                repeat_type=s.setting.repeat_type,
+                day_of_week=s.setting.day_of_week
+            )
+
         schedule_details.append(
             ScheduleDetail(
                 id=s.id,
@@ -515,8 +537,9 @@ async def get_routine_schedules_by_date(
                     id=s.routine.id,
                     title=s.routine.title,
                     detail=s.routine.detail,
-                    category=RoutineSettingWithCategory.model_validate(s.routine.category)
-                )
+                    category=category_data
+                ),
+                setting=setting_data
             )
         )
 
@@ -526,7 +549,6 @@ async def get_routine_schedules_by_date(
         care_recipient={"id": carerecipient_id},
         schedules=schedule_details
     )
-
 
 @router.get("/schedule/{caregiver_id}/{carerecipient_id}/status/{routineschedule_status}", response_model=RoutineSchedulesByStatusResponse)
 async def get_routine_schedules_by_status(
