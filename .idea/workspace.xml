@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b6a96f1b-52c2-4e8b-8991-98093193870d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/android-icon-background.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/android-icon-foreground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/android-icon-monochrome.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/expo.icon/Assets/expo-symbol 2.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/expo.icon/Assets/grid.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/expo.icon/icon.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/favicon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/assets/icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/src/lib/geofence-task.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/src/lib/notification.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/skp-fe/src/lib/permission.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/skp-fe/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/skp-fe/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/skp-fe/src/app/(features)/map/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/skp-fe/src/app/(features)/map/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/skp-fe/src/app/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/skp-fe/src/app/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/skp-fe/src/stores/location-store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/skp-fe/src/stores/location-store.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3GZynELXUfmJgUtb54TsGxDY5k0" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "feat/mapbox-integration",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/fina/Desktop/skp",
+    "settings.editor.selected.configurable": "AndroidSdkUpdater"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b6a96f1b-52c2-4e8b-8991-98093193870d" name="Changes" comment="" />
+      <created>1784193551111</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1784193551111</updated>
+    </task>
+    <servers />
+  </component>
+</project>
