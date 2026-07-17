@@ -60,6 +60,9 @@ export default function MapScreen() {
   const safeZoneVerb = role === 'caregiver' ? 'is' : 'are';
   const safeZonePossessive = role === 'caregiver' ? 'their' : 'your';
 
+  console.log('role', role);
+  
+
   const handleToggleMonitoring = async (value: boolean) => {
     if (!value) {
       await stopSafeZoneGeofencing();
@@ -198,7 +201,7 @@ export default function MapScreen() {
             </View>
           </Link>
         </View>
-        {role !== 'caregiver' && (
+        {role === 'caregiver' && (
           <Link href='/map/picker'>
             <View className='flex justify-between flex-row items-center rounded-xl bg-white w-full p-4'>
               <View className={'flex flex-row gap-2 items-center'}>
