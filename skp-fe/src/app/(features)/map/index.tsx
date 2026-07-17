@@ -16,8 +16,9 @@ import distance from '@turf/distance';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocationStore } from '@/stores/location-store';
 import { Link } from 'expo-router';
-import { requestGeofencePermissions, ensureNotificationPermission } from '@/lib/permission';
+import { requestGeofencePermissions } from '@/lib/permission';
 import { startSafeZoneGeofencing, stopSafeZoneGeofencing } from '@/lib/geofence-task';
+import { sendExitNotification } from '@/lib/notification';
 import { useAuthStore } from '@/stores/auth-store';
 
 const RECIPIENT_NAME_PLACEHOLDER = 'Recipient';
@@ -36,11 +37,6 @@ async function ensureMonitoringPermissions(): Promise<boolean> {
     );
     return false;
   }
-  if (!(await ensureNotificationPermission())) {
-    Alert.alert("Notifications disabled", "Enable notifications to get safe zone alert.");
-    return false;
-  }
-
   return true;
 }
 
@@ -73,7 +69,17 @@ export default function MapScreen() {
     }
 
     const granted = await ensureMonitoringPermissions().catch(() => false);
-    setMonitoring(granted);
+    if (!granted) return;
+    setMonitoring(true);
+
+    if (currentPosition) {
+      const dist = distance(
+        [currentPosition.longitude, currentPosition.latitude],
+        [target.longitude, target.latitude],
+        { units: 'meters' },
+      );
+      if (dist > radius) await sendExitNotification();
+    }
   };
 
   useEffect(() => {
@@ -198,25 +204,23 @@ export default function MapScreen() {
             </View>
           </Link>
         </View>
-        {role === 'caregiver' && (
-          <Link href='/map/picker'>
-            <View className='flex justify-between flex-row items-center rounded-xl bg-white w-full p-4'>
-              <View className={'flex flex-row gap-2 items-center'}>
-                <View className='w-[30px] h-[30px] items-center justify-center rounded-full bg-brand-tint'>
-                  <Ionicons name={'location-sharp'} size={20} color='#007FFF' />
-                </View>
-                <StyledText size={16} className='font-semibold'>
-                  Set safe zone
-                </StyledText>
+        <Link href='/map/picker'>
+          <View className='flex justify-between flex-row items-center rounded-xl bg-white w-full p-4'>
+            <View className={'flex flex-row gap-2 items-center'}>
+              <View className='w-[30px] h-[30px] items-center justify-center rounded-full bg-brand-tint'>
+                <Ionicons name={'location-sharp'} size={20} color='#007FFF' />
               </View>
-              <Ionicons
-                name={'chevron-forward-outline'}
-                size={20}
-                color='#1E2430'
-              />
+              <StyledText size={16} className='font-semibold'>
+                Set safe zone
+              </StyledText>
             </View>
-          </Link>
-        )}
+            <Ionicons
+              name={'chevron-forward-outline'}
+              size={20}
+              color='#1E2430'
+            />
+          </View>
+        </Link>
         {target && radius && (
           <View className='flex flex-row items-center justify-end mt-2'>
             <StyledText size={16} className='font-semibold'>

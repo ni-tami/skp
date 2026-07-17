@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "clean:native": "rm -rf node_modules/react-native-worklets/android/.cxx node_modules/react-native-worklets/android/build node_modules/react-native-reanimated/android/.cxx node_modules/react-native-reanimated/android/build node_modules/expo-modules-core/android/.cxx node_modules/expo-modules-core/android/build"
   },
   "dependencies": {
     "@expo-google-fonts/dm-sans": "^0.4.2",

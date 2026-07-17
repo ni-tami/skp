@@ -11,7 +11,8 @@ import '../config/mapbox';
 import '../lib/geofence-task';
 import { useEffect, useState } from 'react';
 import { queryClient } from '@/lib/query-client';
-import { requestForegroundLocationPermission } from '@/lib/permission';
+import { requestForegroundLocationPermission, ensureNotificationPermission } from '@/lib/permission';
+import { setupNotificationChannel } from '@/lib/notification';
 import { getStoredSession } from '@/lib/token-storage';
 import { useAuthStore } from '@/stores/auth-store';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -27,6 +28,8 @@ export default function RootLayout() {
 
   useEffect(() => {
     requestForegroundLocationPermission();
+    ensureNotificationPermission();
+    setupNotificationChannel();
     getStoredSession()
       .then((session) => {
         if (session)

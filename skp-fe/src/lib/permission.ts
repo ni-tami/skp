@@ -1,6 +1,5 @@
 import * as Location from 'expo-location';
 import * as Notifications from 'expo-notifications';
-import { Platform } from 'react-native';
 
 export async function requestForegroundLocationPermission(): Promise<boolean> {
   const result = await Location.requestForegroundPermissionsAsync();
@@ -26,13 +25,6 @@ export async function ensureNotificationPermission(): Promise<boolean> {
 
   const requested = await Notifications.requestPermissionsAsync();
   if (!requested.granted) return false;
-
-  if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('geofence', {
-      name: 'Location alerts',
-      importance: Notifications.AndroidImportance.HIGH,
-    });
-  }
 
   return true;
 }

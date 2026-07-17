@@ -5,6 +5,12 @@ import HomeButton from "../components/home/HomeButton";
 import StyledText from "@/components/ui/StyledText";
 import { useAuthStore } from "@/stores/auth-store";
 import { clearStoredSession } from "@/lib/token-storage";
+import { useEffect } from "react";
+import { useLocationStore } from "@/stores/location-store";
+import { requestGeofencePermissions } from "@/lib/permission";
+import { startSafeZoneGeofencing } from "@/lib/geofence-task";
+import { sendExitNotification } from "@/lib/notification";
+import distance from "@turf/distance";
 
 const todayLabel = new Date().toLocaleDateString("en-US", {
   weekday: "long",
@@ -14,6 +20,28 @@ const todayLabel = new Date().toLocaleDateString("en-US", {
 
 export default function HomeScreen() {
   const displayName = useAuthStore((state) => state.user?.display_name);
+  const target = useLocationStore((state) => state.targetLocation);
+  const radius = useLocationStore((state) => state.radius);
+  const currentPosition = useLocationStore((state) => state.currentPosition);
+  const monitoring = useLocationStore((state) => state.monitoring);
+  const setMonitoring = useLocationStore((state) => state.setMonitoring);
+
+  useEffect(() => {
+    if (!target || !radius || monitoring) return;
+    requestGeofencePermissions().then((permissions) => {
+      if (!permissions.foreground || !permissions.background) return;
+      setMonitoring(true);
+      startSafeZoneGeofencing(target, radius);
+      if (currentPosition) {
+        const dist = distance(
+          [currentPosition.longitude, currentPosition.latitude],
+          [target.longitude, target.latitude],
+          { units: 'meters' },
+        );
+        if (dist > radius) sendExitNotification();
+      }
+    });
+  }, []);
 
   const handleLogout = async () => {
     await clearStoredSession();

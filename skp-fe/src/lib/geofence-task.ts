@@ -12,7 +12,7 @@ const SAFE_ZONE_REGION_ID = 'safe-zone';
 const WARNING_REGION_ID = 'safe-zone-warning';
 
 const MAX_WARNING_BUFFER_METERS = 30;
-const WARNING_BUFFER_FRACTION = 0.5;
+const WARNING_BUFFER_FRACTION = 2;
 
 TaskManager.defineTask(SAFE_ZONE_GEOFENCE_TASK, async ({ data, error }) => {
   if (error) {
@@ -41,7 +41,7 @@ TaskManager.defineTask(SAFE_ZONE_GEOFENCE_TASK, async ({ data, error }) => {
 export async function startSafeZoneGeofencing(
   region: { latitude: number; longitude: number },
   radius: number,
-): Promise<void> {
+): Promise<boolean> {
   const regions: Location.LocationRegion[] = [
     {
       identifier: SAFE_ZONE_REGION_ID,
@@ -69,7 +69,13 @@ export async function startSafeZoneGeofencing(
     });
   }
 
-  await Location.startGeofencingAsync(SAFE_ZONE_GEOFENCE_TASK, regions);
+  try {
+    await Location.startGeofencingAsync(SAFE_ZONE_GEOFENCE_TASK, regions);
+    return true;
+  } catch (e) {
+    console.warn('startGeofencingAsync failed', e);
+    return false;
+  }
 }
 
 export async function stopSafeZoneGeofencing(): Promise<void> {
