@@ -2,6 +2,7 @@ import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 import {
   sendApproachingEdgeNotification,
+  sendEnterNotification,
   sendExitNotification,
 } from '@/lib/notification';
 
@@ -24,12 +25,16 @@ TaskManager.defineTask(SAFE_ZONE_GEOFENCE_TASK, async ({ data, error }) => {
     region: Location.LocationRegion;
   };
 
-  if (eventType !== Location.GeofencingEventType.Exit) return;
-
-  if (region.identifier === WARNING_REGION_ID) {
-    await sendApproachingEdgeNotification();
-  } else if (region.identifier === SAFE_ZONE_REGION_ID) {
-    await sendExitNotification();
+  if (eventType === Location.GeofencingEventType.Exit) {
+    if (region.identifier === WARNING_REGION_ID) {
+      await sendApproachingEdgeNotification();
+    } else if (region.identifier === SAFE_ZONE_REGION_ID) {
+      await sendExitNotification();
+    }
+  } else if (eventType === Location.GeofencingEventType.Enter) {
+    if (region.identifier === SAFE_ZONE_REGION_ID) {
+      await sendEnterNotification();
+    }
   }
 });
 
