@@ -51,12 +51,13 @@ async def get_connection(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    q = await db.query(Connection).filter(Connection.accepted == True)  # noqa: E712
+    stmt = select(Connection).where(Connection.accepted == True)  # noqa: E712
     if user.role == "caregiver":
-        q = q.filter(Connection.caregiver_id == user.id)
+        stmt = stmt.where(Connection.caregiver_id == user.id)
     else:
-        q = q.filter(Connection.recipient_id == user.id)
-    return q.all()
+        stmt = stmt.where(Connection.recipient_id == user.id)
+    result = await db.execute(stmt)
+    return result.scalars().all()
 
 
 @router.delete("/{connection_id}")
