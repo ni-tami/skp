@@ -54,6 +54,7 @@ export default function LoginScreen() {
           <Input
             label="Password"
             placeholder="••••••••"
+            placeholderTextColor="#9AA4B2"
             secureTextEntry
             value={password}
             onChangeText={setPassword}

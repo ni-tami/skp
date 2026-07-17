@@ -235,25 +235,15 @@ export default function MapPicker() {
       >
         <Ionicons name='locate' size={22} color='#007FFF' />
       </Pressable>
-      <View className='absolute top-[5rem] left-0 right-0 items-center'>
-        <View className={'flex flex-row w-[90vw] gap-2 items-center shadow-lg'}>
-          <Pressable
-            onPress={() => {
-              router.back();
-            }}
-            className='w-[35px] h-[35px] items-center justify-center rounded-full bg-white'
-          >
-            <Ionicons name={'chevron-back-sharp'} size={16} color='#1E2430' />
-          </Pressable>
-          <View className='bg-white w-[80vw] p-2 rounded-full shadow-lg'>
-            <Pressable
-              onPress={() => {}}
-              className='items-center justify-center self-end w-10 h-10 rounded-full bg-cloud'
-            >
-              <Ionicons name={'search'} size={16} color='#1E2430' />
-            </Pressable>
-          </View>
-        </View>
+      <View className='absolute top-[5rem] left-8'>
+        <Pressable
+          onPress={() => {
+            router.back();
+          }}
+          className='w-[35px] h-[35px] items-center justify-center rounded-full bg-white shadow-lg'
+        >
+          <Ionicons name={'chevron-back-sharp'} size={16} color='#1E2430' />
+        </Pressable>
       </View>
       <View className='absolute bottom-8 left-0 right-0 items-center'>
         <View className='flex gap-2 justify-end bg-white w-[90vw] h-fit p-8 rounded-3xl shadow'>
