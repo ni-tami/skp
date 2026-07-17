@@ -32,7 +32,7 @@ from app.schemas import (
     RoutineSchedule as RoutineScheduleSchema
 
 )
-from app.utility.schedule_generator import generate_schedules_for_week 
+from app.utility.schedule_generator import generate_schedules 
 from typing_extensions import Literal
 
 # Placeholder dependency for your database session
@@ -323,14 +323,29 @@ async def get_routine_settings_by_caregiver(caregiver_id: int, db: AsyncSession 
         routine_settings=routine_settings_list
     )
 
-@router.post("/setting", response_model=RoutineSettingSchema, status_code=status.HTTP_201_CREATED)
-async def create_routine_setting(payload: RoutineSettingCreate, db: AsyncSession = Depends(get_db)):
+@router.post(
+    "/setting", 
+    response_model=RoutineSettingSchema, 
+    status_code=status.HTTP_201_CREATED
+)
+async def create_routine_setting(
+    payload: RoutineSettingCreate, 
+    db: AsyncSession = Depends(get_db)
+):
     # 1. Verify that the referenced routine exists
     routine_check = await db.execute(
-        select(Routine).where(and_(Routine.id == payload.routine_id, Routine.deleted_at.is_(None)))
+        select(Routine).where(
+            and_(
+                Routine.id == payload.routine_id, 
+                Routine.deleted_at.is_(None)
+            )
+        )
     )
     if not routine_check.scalar_one_or_none():
-        raise HTTPException(status_code=404, detail="Associated active routine not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="Associated active routine not found"
+        )
 
     now = datetime.utcnow()
     db_setting = RoutineSetting(
@@ -339,20 +354,28 @@ async def create_routine_setting(payload: RoutineSettingCreate, db: AsyncSession
         updated_at=now
     )
     db.add(db_setting)
-    await db.flush() # Flush to assign db_setting.id without committing yet
+    await db.flush()  # Flush to assign db_setting.id without committing yet
 
     # 2. Generate and add schedules matching target weekdays & intervals
-    if db_setting.day_of_week:
-        generated_schedules = generate_schedules_for_week(
+    # Checks repeat_type logic to determine if we should execute schedule generation
+    should_generate = (
+        db_setting.repeat_type in ("ONCE", "DAILY") or 
+        (db_setting.repeat_type == "WEEKLY" and db_setting.day_of_week)
+    )
+
+    if should_generate:
+        generated_schedules = generate_schedules(
             routine_id=db_setting.routine_id,
             setting_id=db_setting.id,
             start_time=db_setting.start_time,
             end_time=db_setting.end_time,
             interval=db_setting.interval,
-            day_of_week=db_setting.day_of_week,
-            anchor_date=now.date() # Anchors schedules in the current week
+            repeat_type=db_setting.repeat_type,  # New parameter passed here
+            day_of_week=db_setting.day_of_week,  # Safely passes None if ONCE or DAILY
+            anchor_date=now.date()               # Anchors schedules in the current week
         )
-        db.add_all(generated_schedules)
+        if generated_schedules:
+            db.add_all(generated_schedules)
 
     await db.commit()
     await db.refresh(db_setting)
