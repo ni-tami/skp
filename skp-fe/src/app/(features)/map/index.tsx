@@ -60,9 +60,6 @@ export default function MapScreen() {
   const safeZoneVerb = role === 'caregiver' ? 'is' : 'are';
   const safeZonePossessive = role === 'caregiver' ? 'their' : 'your';
 
-  console.log('role', role);
-  
-
   const handleToggleMonitoring = async (value: boolean) => {
     if (!value) {
       await stopSafeZoneGeofencing();
