@@ -18,6 +18,43 @@ export const DUMMY_CATEGORIES = [
         { id: 6, name: 'Vital Check', icon: 'pulse', variant: 'success' },
       ];
 
+
+      export const DUMMY_SETTINGS = [
+                {
+                  id: 201,
+                  routine: {
+                    id: 10,
+                    title: "Morning Medication",
+                    detail: "Take 1 pill after breakfast",
+                    carerecipient: { id: 101, name: "Eleanor Vance" },
+                  } as any,
+                  start_time: "08:00",
+                  end_time: "09:00",
+                  interval: 30,
+                  repeat_type: REPEAT_TYPE.DAILY,
+                  day_of_week: [],
+                  created_at: "",
+                  updated_at: "",
+                },
+                {
+                  id: 202,
+                  routine: {
+                    id: 11,
+                    title: "Afternoon Walk",
+                    detail: "30 mins light walking in garden",
+                    carerecipient: { id: 102, name: "Arthur Pendelton" },
+                  } as any,
+                  start_time: "16:00",
+                  end_time: "17:00",
+                  interval: 60,
+                  repeat_type: REPEAT_TYPE.WEEKLY,
+                  day_of_week: [DAY_OF_WEEK.MONDAY, DAY_OF_WEEK.WEDNESDAY, DAY_OF_WEEK.FRIDAY],
+                  created_at: "",
+                  updated_at: "",
+                },
+              ];
+
+
       export const DUMMY_SCHEDULES: RoutineSchedule[] = [
   {
     id: 1,

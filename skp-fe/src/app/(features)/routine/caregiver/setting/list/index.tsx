@@ -2,7 +2,7 @@ import { ActionButtons } from "@/components/routine/ActionButtons";
 import { Badge } from "@/components/shared/Badge";
 import { FloatingButton } from "@/components/shared/FloatingButton";
 import { SearchBar } from "@/components/shared/SearchBar";
-import { DUMMY_SCHEDULES } from "@/constants/dummy";
+import { DUMMY_SETTINGS } from "@/constants/dummy";
 import { REPEAT_TYPE } from "@/constants/routine";
 import { getRoutineSettingsQueryOpt } from "@/services/queryOptions/routineQueryOpt";
 import { useQuery } from "@tanstack/react-query";
@@ -38,7 +38,7 @@ export default function ScheduleListScreen() {
     );
   };
 
-  const filteredSchedules = DUMMY_SCHEDULES?.filter((item) => {
+  const filteredSchedules = DUMMY_SETTINGS?.filter((item) => {
     const query = searchQuery.toLowerCase();
     const matchTitle = item.routine?.title?.toLowerCase().includes(query) ?? false;
     const matchRecipient = item.routine?.carerecipient?.name?.toLowerCase().includes(query) ?? false;
